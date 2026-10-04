@@ -65,16 +65,16 @@ export default function LoginPage({ setLoggingIn, isLoggingIn }) {
       animate={isLoggingIn ? "show" : "hidden"}
     >
       <motion.div
-        className="bg-slate-900/80 relative overflow-hidden object-cover backdrop-blur-md w-9/10 sm:w-120 h-3/4 rounded-4xl border-4 border-slate-950/50 shadow-[0_0_30px_rgba(0,0,0,0.8)]"
+        className="bg-slate-900/80 relative overflow-hidden object-cover backdrop-blur-md w-9/10 sm:w-120 h-3/4 rounded-4xl shadow-[0_0_30px_rgba(0,0,0,0.8)]"
         variants={loginPanelVariants}
         initial="hidden"
         animate={isLoggingIn ? "show" : "hidden"}
       >
         <div className="absolute top-0 inset-x-0 bottom-3/10 flex items-center justify-center">
           <img
-            src="/android-chrome-192x192.png"
+            src="/android-chrome-512x512.png"
             alt="image"
-            className="drop-shadow-[0_0px_80px_#0f85fa]"
+            className="drop-shadow-[0_0px_80px_#0f85fa] max-w-70"
           />
         </div>
         <motion.button

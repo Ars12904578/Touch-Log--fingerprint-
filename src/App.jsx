@@ -31,7 +31,7 @@ export default function App() {
       <div className="fixed inset-0 w-full h-dvh object-cover">
         <img src="/bg2.png" alt="Background" className="w-full h-full object-cover" />
       </div>
-      <div className="fixed inset-0 bg-black/25">
+      <div className="fixed inset-0 bg-black/10">
         <BrowserRouter>
           <AnimatedRoutes />
         </BrowserRouter>

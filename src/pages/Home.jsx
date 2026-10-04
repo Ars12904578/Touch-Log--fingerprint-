@@ -7,16 +7,15 @@ import { auth, signOutUser } from "../firebase";
 import { Avatar, Badge } from "@heroui/react";
 
 import {
-  ArrowUpRight,
   BadgeCheck,
   ShieldCheck,
   ClipboardCheck,
   LogOut,
   ChevronRight,
-  FingerprintPattern,
+  ListChecks,
   Fingerprint,
   Clock,
-  Zap
+  Zap,
 } from "lucide-react";
 
 import { useState, useEffect } from "react";
@@ -112,18 +111,18 @@ export default function Home() {
         variants={heroVariants}
         initial="hidden"
         animate="show"
-        className="scale-90 md:scale-80 fixed inset-x-0 top-0 bottom-4/11 md:bottom-40 p-5 flex flex-col items-center justify-center gap-5"
+        className="scale-90 md:scale-80 fixed inset-x-0 top-0 bottom-4/11 md:bottom-40 p-5 flex flex-col items-center justify-center gap-2"
       >
         <motion.div
           variants={fadeUpVariants}
-          className="text-sm sm:text-lg py-2 px-3 pr-5 bg-emerald-800/80 rounded-full text-white flex items-center justify-center gap-1.5"
+          className="text-sm sm:text-lg py-2 px-3 pr-4 bg-emerald-800/80 rounded-full text-white flex items-center justify-center gap-1.5"
         >
-          <FingerprintPattern /> Fingerprint based attendance system
+          <ListChecks /> Fingerprint-Based Attendance System
         </motion.div>
 
         <motion.h1
           variants={fadeUpVariants}
-          className="flex flex-col gap-3 font-extrabold text-6xl text-left md:text-7xl lg:text-8xl sm:text-center text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)]"
+          className="mb-10 flex flex-col gap-3 font-extrabold text-6xl text-left md:text-7xl lg:text-8xl sm:text-center text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)]"
         >
           <span>Track every touch</span>
           <span className="text-blue-950 text-shadow-[0_0px_50px_rgba(255,255,255,1)]">
@@ -133,11 +132,28 @@ export default function Home() {
 
         <motion.div
           variants={fadeUpVariants}
-          className="text-lg md:text-2xl text-left backdrop-blur-sm font-bold text-white bg-slate-950/80 py-2 px-5 sm:text-center rounded-2xl"
+          className="text-lg md:text-2xl text-left backdrop-blur-sm font-bold text-white bg-slate-950/50 py-2 px-5 sm:text-center rounded-2xl"
         >
-          A modern, secure attendance tracking system.
+          A Group 4 Project • Developed by Arvi Jay Tungpalan
         </motion.div>
       </motion.div>
+
+      <motion.img
+        src="/container.png"
+        alt="Block"
+        initial={{ opacity: 0, y: 50, rotate: 10 }}
+        animate={{
+          opacity: 1,
+          y: [0, -16, 0],
+          rotate: [15, 18, 15],
+        }}
+        transition={{
+          opacity: { duration: 0.8 },
+          y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+          rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+        }}
+        className="fixed w-100 -bottom-35 left-1/2 -translate-x-1/2"
+      />
 
       {/* Floaters */}
       <div className="fixed inset-0 flex items-center justify-center">
@@ -201,9 +217,7 @@ export default function Home() {
             onClick={() =>
               isLoggedIn ? navigate("/dashboard") : setLoggingIn(true)
             }
-            className={`shadow-xl cursor-pointer relative text-xl w-fit max-w-60 sm:max-w-100 bg-white backdrop-blur-md rounded-full text-black flex items-center justify-center ${
-              isLoggedIn ? "py-3 px-3" : "py-3 px-5"
-            }`}
+            className="shadow-[0_0_40px_rgba(0,0,0,1)] cursor-pointer relative text-xl w-fit max-w-60 sm:max-w-100 bg-white backdrop-blur-md rounded-full text-black flex items-center justify-center py-3 px-3"
             variants={getStartedVariants}
             initial="hidden"
             animate="show"
@@ -243,9 +257,10 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.18 }}
-                  className="inline-flex items-center justify-center gap-3"
+                  className=" w-20 aspect-square"
                 >
-                  Get Started <ArrowUpRight />
+                  {/* Get Started <ArrowUpRight /> */}
+                  <Fingerprint className="w-full h-full text-slate-900"></Fingerprint>
                 </motion.span>
               )}
             </AnimatePresence>
