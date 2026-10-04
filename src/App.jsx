@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 
@@ -26,10 +27,20 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
+  const [backgroundLoaded, setBackgroundLoaded] = useState(false);
+
   return (
     <div>
       <div className="fixed inset-0 w-full h-dvh object-cover">
-        <img src="/bg2.png" alt="Background" className="w-full h-full object-cover" />
+        <motion.img
+          src="/bg.png"
+          alt="Background"
+          className="w-full h-full object-cover"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: backgroundLoaded ? 1 : 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          onLoad={() => setBackgroundLoaded(true)}
+        />
       </div>
       <div className="fixed inset-0 bg-black/10">
         <BrowserRouter>

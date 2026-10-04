@@ -132,7 +132,7 @@ export default function Home() {
 
         <motion.div
           variants={fadeUpVariants}
-          className="text-lg md:text-2xl text-left backdrop-blur-sm font-bold text-white bg-slate-950/50 py-2 px-5 sm:text-center rounded-2xl"
+          className="text-lg md:text-2xl text-left backdrop-blur-xs font-bold text-white bg-slate-950/50 py-2 px-5 sm:text-center rounded-2xl"
         >
           A Group 4 Project • Developed by Arvi Jay Tungpalan
         </motion.div>
@@ -189,7 +189,7 @@ export default function Home() {
                   initial="hidden"
                   animate="show"
                   style={{ x: "-50%", y: "-50%" }}
-                  className="flex items-center gap-2 py-2 px-4 bg-slate-950/30 backdrop-blur-sm rounded-full text-sm text-white/80 border border-white/50 shadow-lg w-max"
+                  className="flex items-center gap-2 py-2 px-4 bg-slate-950/30 backdrop-blur-xs rounded-full text-sm text-white/80 border border-white/50 shadow-lg w-max"
                 >
                   <Icon className="w-4 h-4 shrink-0" />
                   {label}
@@ -217,7 +217,7 @@ export default function Home() {
             onClick={() =>
               isLoggedIn ? navigate("/dashboard") : setLoggingIn(true)
             }
-            className="shadow-[0_0_40px_rgba(0,0,0,1)] cursor-pointer relative text-xl w-fit max-w-60 sm:max-w-100 bg-white backdrop-blur-md rounded-full text-black flex items-center justify-center py-3 px-3"
+            className="shadow-[0_0_40px_rgba(0,0,0,1)] cursor-pointer relative text-xl w-fit max-w-60 sm:max-w-100 bg-white backdrop-blur-xs rounded-full text-black flex items-center justify-center py-3 px-3"
             variants={getStartedVariants}
             initial="hidden"
             animate="show"
@@ -280,7 +280,7 @@ export default function Home() {
                   layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
                 }}
                 onClick={() => signOutUser()}
-                className="shadow-xl cursor-pointer py-2 px-5 relative text-base w-fit max-w-60 sm:max-w-100 bg-red-500 text-white backdrop-blur-md rounded-full flex items-center justify-center gap-1"
+                className="shadow-xl cursor-pointer py-2 px-5 relative text-base w-fit max-w-60 sm:max-w-100 bg-red-500 text-white backdrop-blur-xs rounded-full flex items-center justify-center gap-1"
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.92 }}
               >
