@@ -112,7 +112,7 @@ export default function Home() {
         variants={heroVariants}
         initial="hidden"
         animate="show"
-        className="scale-90 md:scale-80 fixed inset-x-0 top-0 bottom-4/11 md:bottom-40 p-5 flex flex-col items-center justify-center gap-2"
+        className="scale-90 md:scale-80 fixed inset-x-0 top-10 bottom-auto sm:top-0 sm:bottom-40 p-5 flex flex-col items-center justify-center gap-2"
       >
         <motion.div
           variants={fadeUpVariants}
@@ -123,7 +123,7 @@ export default function Home() {
 
         <motion.h1
           variants={fadeUpVariants}
-          className="tracking-tighter mb-10 flex flex-col gap-3 font-extrabold text-6xl text-left md:text-7xl lg:text-8xl sm:text-center text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)]"
+          className="tracking-tighter mb-10 flex flex-col gap-3 font-extrabold text-5xl sm:text-6xl text-left md:text-7xl lg:text-8xl sm:text-center text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)]"
         >
           <span>Track every touch</span>
           <span className="text-blue-950 text-shadow-[0_0px_50px_rgba(255,255,255,1)]">
@@ -207,7 +207,7 @@ export default function Home() {
           transition={{
             layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
           }}
-          className="fixed inset-x-0 bottom-0 flex flex-col gap-5 items-center justify-center pb-10"
+          className="fixed inset-x-0 bottom-0 flex flex-col gap-2 items-center justify-center pb-2 md:pb-10"
         >
           <motion.button
             layout
