@@ -94,16 +94,17 @@ const getStartedVariants = {
 export default function Home() {
   const [isLoggingIn, setLoggingIn] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
+  
   const [userIn, setUser] = useState(null);
-  const navigate = useNavigate();
-  const layoutKey = `${isLoggedIn}:${userIn?.displayName ?? ""}`;
-
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
       setLoggedIn(Boolean(user));
       setUser(user);
     });
   }, []);
+  
+  const navigate = useNavigate();
+  const layoutKey = `${isLoggedIn}:${userIn?.displayName ?? ""}`;
 
   return (
     <div>
@@ -240,7 +241,7 @@ export default function Home() {
                         {userIn?.displayName
                           ?.trim()
                           .slice(0, 2)
-                          .toUpperCase() || "TE"}
+                          .toUpperCase() || "TL"}
                       </Avatar.Fallback>
                     </Avatar>
                     <Badge color="success" placement="bottom-right" size="sm" />
