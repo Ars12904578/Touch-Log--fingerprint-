@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+@import "@heroui/styles"; 
+
+@theme {
+  --font-poppins: "Poppins", sans-serif;
+}
+
+body{
+  background-color: #0032a8;
+}
+
+*{
+  font-family: 'Satoshi-Variable';
+  user-select: none;
+}
+
+.glass-liquid {
+  box-sizing: border-box;
+  overflow: hidden;
+  contain: layout style paint;
+  isolation: isolate;
+  translate: var(--glass-drag-x, 0px) var(--glass-drag-y, 0px);
+  touch-action: var(--lg-touch-action, auto);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0.04) 42%,
+    rgba(0, 0, 0, 0.08)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.16),
+    inset 0 0 18px color-mix(in srgb, white calc(var(--lg-rim, 0.2) * 70%), transparent),
+    0 7px 24px rgba(0, 0, 0, 0.18);
+  will-change: auto;
+}
+
+.glass-liquid--blur-fallback {
+  backdrop-filter: blur(var(--lg-blur, 2px));
+  -webkit-backdrop-filter: blur(var(--lg-blur, 2px));
+}
+
+.nav{
+  background: linear-gradient(180deg, #ffffff 0%, #0fe7fa00 100%);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+/* add: [animation:float_4s_ease-in-out_infinite] sa className, at staggered delays per badge */
