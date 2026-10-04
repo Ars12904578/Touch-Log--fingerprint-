@@ -122,11 +122,11 @@ export default function Home() {
 
         <motion.h1
           variants={fadeUpVariants}
-          className="mb-10 flex flex-col gap-3 font-extrabold text-6xl text-left md:text-7xl lg:text-8xl sm:text-center text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)]"
+          className="tracking-tighter mb-10 flex flex-col gap-3 font-extrabold text-6xl text-left md:text-7xl lg:text-8xl sm:text-center text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)]"
         >
           <span>Track every touch</span>
           <span className="text-blue-950 text-shadow-[0_0px_50px_rgba(255,255,255,1)]">
-            with Touch Log.
+            with Touch Log
           </span>
         </motion.h1>
 

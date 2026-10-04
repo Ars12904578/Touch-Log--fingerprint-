@@ -12,12 +12,14 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAt7DAJ6eaF0V3L9utj6RYjKqj1UEmAFMg",
-  authDomain: "tech-elect.firebaseapp.com",
-  projectId: "tech-elect",
-  storageBucket: "tech-elect.firebasestorage.app",
-  messagingSenderId: "450863205672",
-  appId: "1:450863205672:web:ff24479bce5f121535541d"
+  apiKey: "AIzaSyDiam8iSiBI9BiTLSB9l_HdmoZbKl_ropc",
+  authDomain: "arvi-a7877.firebaseapp.com",
+  databaseURL: "https://arvi-a7877-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "arvi-a7877",
+  storageBucket: "arvi-a7877.firebasestorage.app",
+  messagingSenderId: "406459166420",
+  appId: "1:406459166420:web:8d0af64755b3a38a701541",
+  measurementId: "G-RWY6ESJ7GN"
 };
 
 // Initialize Firebase
