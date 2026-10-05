@@ -107,8 +107,6 @@ export default function Home() {
 
   return (
     <div>
-      <HeroHeader />
-
       <motion.img
         src="/container.png"
         alt="Block"
@@ -121,6 +119,9 @@ export default function Home() {
         }}
         className="fixed -bottom-35 left-1/2 w-100 -translate-x-1/2"
       />
+      
+      <HeroHeader />
+
 
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="relative h-0 w-0">
@@ -205,7 +206,7 @@ function HeroHeader() {
         variants={fadeUpVariants}
         className="rounded-2xl bg-slate-950/50 px-5 py-2 text-left text-lg font-bold text-white backdrop-blur-xs md:text-2xl sm:text-center"
       >
-        A Group 4 Project • Developed by Arvi Jay Tungpalan
+        A Group 4 Project <br /> Built by Arvi Jay Tungpalan
       </motion.div>
     </motion.div>
   );
@@ -261,7 +262,7 @@ function GetStartedButton({ layoutKey, navigate, isLoggedIn, user, setLoggingIn 
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.18 }}
-              className="aspect-square w-20"
+              className="aspect-square w-20 cursor-pointer"
             >
               <Fingerprint className="h-full w-full text-slate-900" />
             </motion.span>

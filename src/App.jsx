@@ -1,8 +1,32 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useConnectivity } from "./hooks/useConnectivity";
+import OfflineAttendance from "./components/OfflineAttendance";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+
+function AppUpdateNotice() {
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  useEffect(() => {
+    const showUpdatingNotice = () => setIsUpdating(true);
+    window.addEventListener("touch-log:pwa-updating", showUpdatingNotice);
+    return () =>
+      window.removeEventListener("touch-log:pwa-updating", showUpdatingNotice);
+  }, []);
+
+  if (!isUpdating) return null;
+
+  return (
+    <div
+      role="status"
+      className="fixed left-1/2 top-4 z-200 -translate-x-1/2 rounded-full bg-slate-950/90 px-4 py-2 text-sm text-white shadow-lg"
+    >
+      Updating application...
+    </div>
+  );
+}
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -28,25 +52,45 @@ function AnimatedRoutes() {
 
 export default function App() {
   const [backgroundLoaded, setBackgroundLoaded] = useState(false);
+  const {
+    internetAvailable,
+    isCheckingInternet,
+    hasServiceWorkerController,
+    checkInternet,
+  } = useConnectivity();
+  const isOffline = internetAvailable === false;
+  const appAssetsAvailable = !isOffline || hasServiceWorkerController;
 
   return (
     <div>
-      <div className="fixed inset-0 w-full h-dvh object-cover">
-        <motion.img
-          src="/bg.png"
-          alt="Background"
-          className="w-full h-full object-cover"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: backgroundLoaded ? 1 : 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          onLoad={() => setBackgroundLoaded(true)}
-        />
-      </div>
+      {internetAvailable === true && (
+        <div className="fixed inset-0 h-dvh w-full object-cover">
+          <motion.img
+            src="/bg.png"
+            alt="Background"
+            className="h-full w-full object-cover"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: backgroundLoaded ? 1 : 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            onLoad={() => setBackgroundLoaded(true)}
+          />
+        </div>
+      )}
       <div className="fixed inset-0 bg-black/10">
-        <BrowserRouter>
-          <AnimatedRoutes />
-        </BrowserRouter>
+        {isOffline ? (
+          <OfflineAttendance
+            internetAvailable={internetAvailable}
+            isCheckingInternet={isCheckingInternet}
+            appAssetsAvailable={appAssetsAvailable}
+            onRetry={checkInternet}
+          />
+        ) : (
+          <BrowserRouter>
+            <AnimatedRoutes />
+          </BrowserRouter>
+        )}
       </div>
+      <AppUpdateNotice />
     </div>
   );
 }
