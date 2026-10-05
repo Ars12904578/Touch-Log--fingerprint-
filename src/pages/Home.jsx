@@ -1,25 +1,23 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import LoginPage from "../components/LoginContainer";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, signOutUser } from "../firebase";
 import { Avatar, Badge } from "@heroui/react";
-
 import {
   BadgeCheck,
-  ShieldCheck,
-  ClipboardCheck,
-  LogOut,
   ChevronRight,
-  ListChecks,
-  Fingerprint,
+  ClipboardCheck,
   Clock,
+  Fingerprint,
+  ListChecks,
+  LogOut,
+  ShieldCheck,
   Zap,
 } from "lucide-react";
-
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, signOutUser } from "../firebase";
+import LoginPage from "../components/LoginContainer";
 
 const trustBadges = [
   { icon: Fingerprint, label: "Secure fingerprint", angle: 0 },
@@ -91,108 +89,69 @@ const getStartedVariants = {
   },
 };
 
+function getInitials(name) {
+  return name?.trim().slice(0, 2).toUpperCase() || "TL";
+}
+
 export default function Home() {
-  const [isLoggingIn, setLoggingIn] = useState(false);
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  
-  const [userIn, setUser] = useState(null);
-  useEffect(() => {
-    return onAuthStateChanged(auth, (user) => {
-      setLoggedIn(Boolean(user));
-      setUser(user);
-    });
-  }, []);
-  
   const navigate = useNavigate();
-  const layoutKey = `${isLoggedIn}:${userIn?.displayName ?? ""}`;
+  const [isLoggingIn, setLoggingIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const isLoggedIn = Boolean(user);
+  const layoutKey = `${isLoggedIn}:${user?.displayName ?? ""}`;
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, setUser);
+    return unsubscribe;
+  }, []);
 
   return (
     <div>
-      <motion.div
-        variants={heroVariants}
-        initial="hidden"
-        animate="show"
-        className="scale-90 md:scale-80 fixed inset-x-0 top-10 bottom-auto sm:top-0 sm:bottom-40 p-5 flex flex-col items-center justify-center gap-2"
-      >
-        <motion.div
-          variants={fadeUpVariants}
-          className="text-sm sm:text-lg py-2 px-3 pr-4 bg-emerald-800/80 rounded-full text-white flex items-center justify-center gap-1.5"
-        >
-          <ListChecks /> Fingerprint-Based Attendance System
-        </motion.div>
-
-        <motion.h1
-          variants={fadeUpVariants}
-          className="tracking-tighter mb-10 flex flex-col gap-3 font-extrabold text-5xl sm:text-6xl text-left md:text-7xl lg:text-8xl sm:text-center text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)]"
-        >
-          <span>Track every touch</span>
-          <span className="text-blue-950 text-shadow-[0_0px_50px_rgba(255,255,255,1)]">
-            with Touch Log
-          </span>
-        </motion.h1>
-
-        <motion.div
-          variants={fadeUpVariants}
-          className="text-lg md:text-2xl text-left backdrop-blur-xs font-bold text-white bg-slate-950/50 py-2 px-5 sm:text-center rounded-2xl"
-        >
-          A Group 4 Project • Developed by Arvi Jay Tungpalan
-        </motion.div>
-      </motion.div>
+      <HeroHeader />
 
       <motion.img
         src="/container.png"
         alt="Block"
         initial={{ opacity: 0, y: 50, rotate: 10 }}
-        animate={{
-          opacity: 1,
-          y: [0, -16, 0],
-          rotate: [15, 18, 15],
-        }}
+        animate={{ opacity: 1, y: [0, -16, 0], rotate: [15, 18, 15] }}
         transition={{
           opacity: { duration: 0.8 },
           y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
           rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" },
         }}
-        className="fixed w-100 -bottom-35 left-1/2 -translate-x-1/2"
+        className="fixed -bottom-35 left-1/2 w-100 -translate-x-1/2"
       />
 
-      {/* Floaters */}
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="relative h-0 w-0">
-          {/* Orbit ring */}
           <motion.div
             variants={orbitRingVariants}
             initial="hidden"
             animate="show"
-            style={{
-              x: "-50%",
-              y: "-50%",
-            }}
-            className="absolute w-130 h-130 md:w-200 md:h-200 lg:w-250 lg:h-250 left-0 top-100 md:top-0 rounded-full border-dashed border-white/25 border-3 pointer-events-none"
+            style={{ x: "-50%", y: "-50%" }}
+            className="absolute left-0 top-100 h-130 w-130 rounded-full border-3 border-dashed border-white/25 md:top-0 md:h-200 md:w-200 lg:h-250 lg:w-250"
           />
 
-          {/* Orbiting badges */}
-          {trustBadges.map(({ icon: Icon, label, angle }, i) => (
+          {trustBadges.map(({ icon: Icon, label, angle }, index) => (
             <motion.div
               key={label}
-              custom={{ angle, index: i }}
+              custom={{ angle, index }}
               variants={orbitBadgeVariants}
               initial="hidden"
               animate="show"
               className="absolute left-0 top-35 sm:top-25 md:top-0"
               style={{ transformOrigin: "0 0" }}
             >
-              <div className="scale-80 translate-x-15 sm:scale-100 sm:translate-x-25 md:scale-80 md:translate-x-100 lg:scale-100 lg:translate-x-120">
-                {/* counter-rotation + centering */}
+              <div className="translate-x-15 scale-80 sm:translate-x-25 sm:scale-100 md:translate-x-100 md:scale-80 lg:translate-x-120 lg:scale-100">
                 <motion.div
-                  custom={{ angle, index: i }}
+                  custom={{ angle, index }}
                   variants={counterRotateVariants}
                   initial="hidden"
                   animate="show"
                   style={{ x: "-50%", y: "-50%" }}
-                  className="flex items-center gap-2 py-2 px-4 bg-slate-950/30 backdrop-blur-xs rounded-full text-sm text-white/80 border border-white/50 shadow-lg w-max"
+                  className="flex w-max items-center gap-2 rounded-full border border-white/50 bg-slate-950/30 px-4 py-2 text-sm text-white/80 shadow-lg backdrop-blur-xs"
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
+                  <Icon className="h-4 w-4 shrink-0" />
                   {label}
                 </motion.div>
               </div>
@@ -200,105 +159,140 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Get Started button */}
-        <motion.div
-          layout
-          layoutDependency={layoutKey}
-          transition={{
-            layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
-          }}
-          className="fixed inset-x-0 bottom-0 flex flex-col gap-2 items-center justify-center pb-2 md:pb-10"
-        >
+        <GetStartedButton
+          layoutKey={layoutKey}
+          navigate={navigate}
+          isLoggedIn={isLoggedIn}
+          user={user}
+          setLoggingIn={setLoggingIn}
+        />
+      </div>
+
+      <AnimatePresence>
+        <LoginPage setLoggingIn={setLoggingIn} isLoggingIn={isLoggingIn} />
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function HeroHeader() {
+  return (
+    <motion.div
+      variants={heroVariants}
+      initial="hidden"
+      animate="show"
+      className="fixed inset-x-0 top-0 bottom-auto flex scale-90 flex-col items-center justify-center gap-2 p-5 sm:bottom-40 md:scale-80"
+    >
+      <motion.div
+        variants={fadeUpVariants}
+        className="flex items-center justify-center gap-1.5 rounded-full bg-emerald-800/80 px-3 py-2 pr-4 text-sm text-white sm:text-lg"
+      >
+        <ListChecks />
+        Fingerprint-Based Attendance System
+      </motion.div>
+
+      <motion.h1
+        variants={fadeUpVariants}
+        className="mb-5 flex flex-col gap-3 text-left text-6xl font-extrabold tracking-tighter text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)] sm:text-center md:text-7xl lg:text-8xl"
+      >
+        <span>Track every touch</span>
+        <span className="text-blue-950 text-shadow-[0_0px_50px_rgba(255,255,255,1)]">
+          with Touch Log
+        </span>
+      </motion.h1>
+
+      <motion.div
+        variants={fadeUpVariants}
+        className="rounded-2xl bg-slate-950/50 px-5 py-2 text-left text-lg font-bold text-white backdrop-blur-xs md:text-2xl sm:text-center"
+      >
+        A Group 4 Project • Developed by Arvi Jay Tungpalan
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function GetStartedButton({ layoutKey, navigate, isLoggedIn, user, setLoggingIn }) {
+  const displayName = user?.displayName || "Touch Log User";
+
+  return (
+    <motion.div
+      layout
+      layoutDependency={layoutKey}
+      transition={{ layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] } }}
+      className="fixed inset-x-0 bottom-0 flex flex-col items-center justify-center gap-2 pb-5 md:pb-10"
+    >
+      <motion.button
+        layout
+        layoutDependency={layoutKey}
+        transition={{ layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] } }}
+        onClick={() => (isLoggedIn ? navigate("/dashboard") : setLoggingIn(true))}
+        className="relative flex w-fit max-w-60 items-center justify-center rounded-full bg-white px-3 py-3 text-xl text-black drop-shadow-[0_0px_30px_#0f85ff] backdrop-blur-xs sm:max-w-100"
+        variants={getStartedVariants}
+        initial="hidden"
+        animate="show"
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          {isLoggedIn ? (
+            <motion.span
+              key="account"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18 }}
+              className="inline-flex min-w-0 max-w-full items-center justify-center gap-3"
+            >
+              <Badge.Anchor>
+                <Avatar className="bg-black shadow-xs shadow-black">
+                  <Avatar.Fallback className="bg-slate-900 text-white">
+                    {getInitials(displayName)}
+                  </Avatar.Fallback>
+                </Avatar>
+                <Badge color="success" placement="bottom-right" size="sm" />
+              </Badge.Anchor>
+              <span className="min-w-0 flex-1 truncate">{displayName}</span>
+              <ChevronRight className="truncate" />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="get-started"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18 }}
+              className="aspect-square w-20"
+            >
+              <Fingerprint className="h-full w-full text-slate-900" />
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.button>
+
+      <AnimatePresence initial={false}>
+        {isLoggedIn && (
           <motion.button
+            key="logout"
             layout
             layoutDependency={layoutKey}
+            initial={{ opacity: 0, y: 10, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{
+              duration: 0.22,
+              ease: "easeOut",
               layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
             }}
-            onClick={() =>
-              isLoggedIn ? navigate("/dashboard") : setLoggingIn(true)
-            }
-            className="shadow-[0_0_40px_rgba(0,0,0,1)] cursor-pointer relative text-xl w-fit max-w-60 sm:max-w-100 bg-white backdrop-blur-xs rounded-full text-black flex items-center justify-center py-3 px-3"
-            variants={getStartedVariants}
-            initial="hidden"
-            animate="show"
+            onClick={() => signOutUser()}
+            className="relative flex w-fit max-w-60 items-center justify-center gap-1 rounded-full bg-red-500 px-5 py-2 text-base text-white shadow-xl backdrop-blur-xs sm:max-w-100"
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.92 }}
           >
-            <AnimatePresence mode="wait" initial={false}>
-              {isLoggedIn ? (
-                <motion.span
-                  key="account"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.18 }}
-                  className="inline-flex min-w-0 max-w-full items-center justify-center gap-3"
-                >
-                  <Badge.Anchor>
-                    <Avatar className="shadow-xs shadow-black bg-black">
-                      <Avatar.Fallback className="bg-slate-900 text-white">
-                        {userIn?.displayName
-                          ?.trim()
-                          .slice(0, 2)
-                          .toUpperCase() || "TL"}
-                      </Avatar.Fallback>
-                    </Avatar>
-                    <Badge color="success" placement="bottom-right" size="sm" />
-                  </Badge.Anchor>
-                  <span className="min-w-0 flex-1 truncate">
-                    {userIn.displayName}
-                  </span>
-                  <ChevronRight className="truncate"></ChevronRight>
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="get-started"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.18 }}
-                  className=" w-20 aspect-square"
-                >
-                  {/* Get Started <ArrowUpRight /> */}
-                  <Fingerprint className="w-full h-full text-slate-900"></Fingerprint>
-                </motion.span>
-              )}
-            </AnimatePresence>
+            <LogOut className="h-5" />
+            Log Out
           </motion.button>
-          <AnimatePresence initial={false}>
-            {isLoggedIn && (
-              <motion.button
-                key="logout"
-                layout
-                layoutDependency={layoutKey}
-                initial={{ opacity: 0, y: 10, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                transition={{
-                  duration: 0.22,
-                  ease: "easeOut",
-                  layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
-                }}
-                onClick={() => signOutUser()}
-                className="shadow-xl cursor-pointer py-2 px-5 relative text-base w-fit max-w-60 sm:max-w-100 bg-red-500 text-white backdrop-blur-xs rounded-full flex items-center justify-center gap-1"
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.92 }}
-              >
-                <LogOut className="h-5"></LogOut> Log Out
-              </motion.button>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </div>
-
-      {/* Login Popup */}
-      <AnimatePresence>
-        <LoginPage
-          setLoggingIn={setLoggingIn}
-          isLoggingIn={isLoggingIn}
-        ></LoginPage>
+        )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }

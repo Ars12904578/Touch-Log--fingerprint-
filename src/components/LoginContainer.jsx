@@ -39,16 +39,15 @@ const closeButtonVariants = {
 };
 
 export default function LoginPage({ setLoggingIn, isLoggingIn }) {
-  const handleLogin = async (signIn) => {
+  const handleLogin = async () => {
     try {
-      const result = await signIn();
-      const user = result.user;
+      const result = await login.signInWithGoogle();
 
       console.log({
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
+        uid: result.user.uid,
+        name: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
       });
 
       setLoggingIn(false);
@@ -65,18 +64,19 @@ export default function LoginPage({ setLoggingIn, isLoggingIn }) {
       animate={isLoggingIn ? "show" : "hidden"}
     >
       <motion.div
-        className="bg-slate-900/80 relative overflow-hidden object-cover backdrop-blur-xs w-9/10 sm:w-120 h-3/4 rounded-4xl shadow-[0_0_30px_rgba(0,0,0,0.8)]"
+        className="relative h-3/4 w-9/10 overflow-hidden rounded-4xl bg-slate-900/80 object-cover shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-xs sm:w-120"
         variants={loginPanelVariants}
         initial="hidden"
         animate={isLoggingIn ? "show" : "hidden"}
       >
-        <div className="absolute top-0 inset-x-0 bottom-4/11 flex items-center justify-center">
+        <div className="absolute inset-x-0 bottom-4/11 top-0 flex items-center justify-center">
           <img
             src="/android-chrome-512x512.png"
-            alt="image"
-            className="drop-shadow-[0_0px_80px_#0f85fa] max-w-60"
+            alt="Touch Log logo"
+            className="max-w-60 drop-shadow-[0_0px_80px_#0f85fa]"
           />
         </div>
+
         <motion.button
           variants={closeButtonVariants}
           initial="hidden"
@@ -84,23 +84,26 @@ export default function LoginPage({ setLoggingIn, isLoggingIn }) {
           whileHover={{ scale: 1.3 }}
           whileTap={{ scale: 0.8 }}
           onClick={() => setLoggingIn(false)}
-          className="bg-white w-10 h-10 rounded-full right-3 top-3 absolute flex items-center justify-center"
+          className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white"
+          aria-label="Close login dialog"
         >
           <X className="w-full" />
         </motion.button>
-        <div className="flex flex-col items-center justify-center absolute bottom-0 inset-x-0 p-4 gap-4">
-            <div className="text-white bg-slate-900 p-5 rounded-3xl font-light">
-              Sign in with your Google account to get started with Touch Log and enjoy a fast, secure attendance experience.
-            </div>
-            <motion.button
-              className="cursor-pointer flex items-center justify-center w-full h-fit text-lg gap-4 bg-white/80 py-4 rounded-3xl"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => handleLogin(login.signInWithGoogle)}
-            >
-              <Google className="h-7"></Google>
-              <div>Sign in with Google</div>
-            </motion.button>
+
+        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-center gap-4 p-4">
+          <div className="rounded-3xl bg-slate-900 p-5 text-white font-light">
+            Sign in with your Google account to get started with Touch Log and enjoy a fast, secure attendance experience.
+          </div>
+
+          <motion.button
+            className="flex h-fit w-full cursor-pointer items-center justify-center gap-4 rounded-3xl bg-white/80 py-4 text-lg"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleLogin}
+          >
+            <Google className="h-7" />
+            <span>Sign in with Google</span>
+          </motion.button>
         </div>
       </motion.div>
     </motion.div>
