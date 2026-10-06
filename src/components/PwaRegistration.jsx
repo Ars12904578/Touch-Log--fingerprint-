@@ -6,12 +6,10 @@ export default function PwaRegistration() {
   useEffect(() => {
     if (!import.meta.env.PROD || !('serviceWorker' in navigator)) return
 
-    caches.delete('touch-log-v1').catch((error) => {
-      console.error('Legacy offline cache cleanup failed:', error)
-    })
-
     let registration
     const checkForUpdate = () => {
+      if (document.visibilityState !== 'visible') return
+
       registration?.update().catch((error) => {
         console.error('Service worker update check failed:', error)
       })
@@ -19,6 +17,7 @@ export default function PwaRegistration() {
 
     const updateInterval = window.setInterval(checkForUpdate, 60 * 60 * 1000)
     window.addEventListener('focus', checkForUpdate)
+    document.addEventListener('visibilitychange', checkForUpdate)
 
     registerSW({
       immediate: true,
@@ -29,8 +28,8 @@ export default function PwaRegistration() {
           timeout: 6000,
         })
       },
-      onNeedRefresh() {
-        window.dispatchEvent(new Event('touch-log:pwa-updating'))
+      onNeedReload() {
+        window.location.reload()
       },
       onRegisteredSW(_serviceWorkerUrl, serviceWorkerRegistration) {
         registration = serviceWorkerRegistration
@@ -40,6 +39,7 @@ export default function PwaRegistration() {
     return () => {
       window.clearInterval(updateInterval)
       window.removeEventListener('focus', checkForUpdate)
+      document.removeEventListener('visibilitychange', checkForUpdate)
     }
   }, [])
 

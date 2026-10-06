@@ -41,13 +41,14 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*'],
-        globIgnores: [],
+        globPatterns: [
+          '**/*.{css,eot,html,ico,jpeg,jpg,js,png,svg,ttf,webmanifest,webp,woff,woff2}',
+        ],
         navigateFallback: '/index.html',
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
-        maximumFileSizeToCacheInBytes: Number.MAX_SAFE_INTEGER,
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
       },
       devOptions: {
         enabled: false,

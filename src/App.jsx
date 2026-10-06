@@ -6,33 +6,11 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import OfflineAttendance from "./components/OfflineAttendance";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import { WifiOff } from "lucide-react";
-
-function AppUpdateNotice() {
-  const [isUpdating, setIsUpdating] = useState(false);
-
-  useEffect(() => {
-    const showUpdatingNotice = () => setIsUpdating(true);
-    window.addEventListener("touch-log:pwa-updating", showUpdatingNotice);
-    return () =>
-      window.removeEventListener("touch-log:pwa-updating", showUpdatingNotice);
-  }, []);
-
-  if (!isUpdating) return null;
-
-  return (
-    <div
-      role="status"
-      className="fixed left-1/2 top-4 z-200 -translate-x-1/2 rounded-full bg-slate-950/90 px-4 py-2 text-sm text-white shadow-lg"
-    >
-      Updating application...
-    </div>
-  );
-}
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -141,7 +119,6 @@ export default function App() {
           <AnimatedRoutes />
         </BrowserRouter>
       </div>
-      <AppUpdateNotice />
     </div>
   );
 }
