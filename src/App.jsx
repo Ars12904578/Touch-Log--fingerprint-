@@ -77,7 +77,7 @@ function ManualOfflineNavigation() {
                 onClick={() => setShowPrompt(false)}
                 className="min-h-11 rounded-full border border-white/25 px-5 font-semibold text-white transition hover:bg-white/10"
               >
-                Stay on Current Page
+                Back
               </button>
               <button
                 type="button"
