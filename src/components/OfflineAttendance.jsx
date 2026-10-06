@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { LoaderCircle, PackageX, RefreshCw, ServerOff, WifiOff } from "lucide-react";
+import {
+  LoaderCircle,
+  PackageX,
+  RefreshCw,
+  ServerOff,
+  WifiOff,
+} from "lucide-react";
 
 const attendanceUrl = import.meta.env.VITE_ESP32_ATTENDANCE_URL?.trim();
 
@@ -81,7 +87,13 @@ export default function OfflineAttendance({
           <ConnectionStatus
             icon={WifiOff}
             label="Internet / online attendance service"
-            status={isCheckingInternet ? "checking" : internetAvailable ? "available" : "unavailable"}
+            status={
+              isCheckingInternet
+                ? "checking"
+                : internetAvailable
+                  ? "available"
+                  : "unavailable"
+            }
           />
           <ConnectionStatus
             icon={ServerOff}
@@ -158,7 +170,9 @@ function ConnectionStatus({ icon: Icon, label, status }) {
         <Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-slate-400" />
         <span>{label}</span>
       </span>
-      <span className={`shrink-0 text-xs font-semibold ${statusColors[status]}`}>
+      <span
+        className={`shrink-0 text-xs font-semibold ${statusColors[status]}`}
+      >
         {statusLabels[status]}
       </span>
     </div>

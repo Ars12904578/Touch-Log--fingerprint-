@@ -20,7 +20,7 @@ export default defineConfig({
         'container.png',
       ],
       manifest: {
-        name: 'Touch Log | Fingerprint Attendance System',
+        name: 'Touch Log',
         short_name: 'Touch Log',
         start_url: '/',
         scope: '/',
@@ -41,13 +41,13 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest,woff2}'],
-        globIgnores: ['**/bg.png'],
+        globPatterns: ['**/*'],
+        globIgnores: [],
         navigateFallback: '/index.html',
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        maximumFileSizeToCacheInBytes: Number.MAX_SAFE_INTEGER,
       },
       devOptions: {
         enabled: false,
