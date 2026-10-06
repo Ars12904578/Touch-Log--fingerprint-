@@ -1,4 +1,4 @@
-const Microsoft = (props) => (
+export const Microsoft = (props) => (
   <svg {...props} viewBox="0 0 256 256" preserveAspectRatio="xMidYMid">
     <path fill="#F1511B" d="M121.666 121.666H0V0h121.666z" />
     <path fill="#80CC28" d="M256 121.666H134.335V0H256z" />
@@ -7,9 +7,7 @@ const Microsoft = (props) => (
   </svg>
 );
 
-export { Microsoft };
-
-const Google = (props) => (
+export const Google = (props) => (
   <svg
     {...props}
     xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -251,5 +249,3 @@ const Google = (props) => (
     </g>
   </svg>
 );
-
-export { Google };

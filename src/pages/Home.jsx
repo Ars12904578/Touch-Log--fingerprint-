@@ -122,7 +122,6 @@ export default function Home() {
       
       <HeroHeader />
 
-
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="relative h-0 w-0">
           <motion.div

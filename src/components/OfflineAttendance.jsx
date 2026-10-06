@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   LoaderCircle,
-  PackageX,
   RefreshCw,
   ServerOff,
   WifiOff,
@@ -9,12 +8,7 @@ import {
 
 const attendanceUrl = import.meta.env.VITE_ESP32_ATTENDANCE_URL?.trim();
 
-export default function OfflineAttendance({
-  internetAvailable,
-  isCheckingInternet,
-  appAssetsAvailable,
-  onRetry,
-}) {
+export default function OfflineAttendance() {
   const [localNetworkStatus, setLocalNetworkStatus] = useState(
     attendanceUrl ? "checking" : "unconfigured",
   );
@@ -61,10 +55,6 @@ export default function OfflineAttendance({
     return () => window.clearTimeout(initialCheck);
   }, [checkLocalAttendance]);
 
-  const retryConnections = async () => {
-    await Promise.all([onRetry(), checkLocalAttendance()]);
-  };
-
   return (
     <main className="flex min-h-dvh items-center justify-center overflow-y-auto bg-slate-950 px-5 py-10 text-white">
       <section className="w-full max-w-xl rounded-3xl border border-white/15 bg-slate-950/85 p-6 shadow-2xl backdrop-blur-md sm:p-9">
@@ -73,37 +63,21 @@ export default function OfflineAttendance({
         </div>
 
         <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-orange-300">
-          Offline attendance mode
+          Offline Attendance Page
         </p>
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-          You are disconnected from the attendance network
+          Local attendance
         </h1>
         <p className="mt-3 leading-relaxed text-slate-300">
-          Please connect to the attendance network to continue using the online
-          attendance system.
+          This page checks the configured local attendance service and displays
+          its latest data when available.
         </p>
 
         <div className="mt-7 space-y-3">
           <ConnectionStatus
-            icon={WifiOff}
-            label="Internet / online attendance service"
-            status={
-              isCheckingInternet
-                ? "checking"
-                : internetAvailable
-                  ? "available"
-                  : "unavailable"
-            }
-          />
-          <ConnectionStatus
             icon={ServerOff}
             label="Local ESP32 attendance network"
             status={localNetworkStatus}
-          />
-          <ConnectionStatus
-            icon={PackageX}
-            label="Cached application assets"
-            status={appAssetsAvailable ? "available" : "unavailable"}
           />
         </div>
 
@@ -125,20 +99,13 @@ export default function OfflineAttendance({
           </p>
         )}
 
-        {!appAssetsAvailable && (
-          <p className="mt-4 text-sm text-amber-200">
-            This app is not controlled by its offline cache yet. Reconnect and
-            open it online once so the app shell can be saved for offline use.
-          </p>
-        )}
-
         <button
           type="button"
-          onClick={() => void retryConnections()}
-          disabled={isCheckingInternet || localNetworkStatus === "checking"}
+          onClick={() => void checkLocalAttendance()}
+          disabled={localNetworkStatus === "checking"}
           className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-5 font-semibold text-slate-950 transition hover:bg-slate-200 disabled:cursor-wait disabled:opacity-70"
         >
-          {isCheckingInternet || localNetworkStatus === "checking" ? (
+          {localNetworkStatus === "checking" ? (
             <LoaderCircle aria-hidden="true" className="h-5 w-5 animate-spin" />
           ) : (
             <RefreshCw aria-hidden="true" className="h-5 w-5" />

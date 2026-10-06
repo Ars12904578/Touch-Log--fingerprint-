@@ -1,10 +1,6 @@
 @import 'tailwindcss';
 @import "@heroui/styles"; 
 
-@theme {
-  --font-poppins: "Poppins", sans-serif;
-}
-
 body{
   background-color: #2b6aff;
 }
@@ -49,4 +45,3 @@ body{
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
-/* add: [animation:float_4s_ease-in-out_infinite] sa className, at staggered delays per badge */
