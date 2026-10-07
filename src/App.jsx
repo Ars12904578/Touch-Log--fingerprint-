@@ -40,10 +40,7 @@ function ManualOfflineNavigation() {
   const location = useLocation();
   const [showPrompt, setShowPrompt] = useState(false);
 
-  if (location.pathname === "/offline") {
-    return null;
-  }
-
+  if (location.pathname === "/") {
   return (
     <>
       <button
@@ -95,6 +92,9 @@ function ManualOfflineNavigation() {
       )}
     </>
   );
+  } else {
+    return null;
+  }
 }
 
 export default function App() {
