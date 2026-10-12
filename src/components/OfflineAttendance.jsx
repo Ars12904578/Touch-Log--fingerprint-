@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 import {
   LoaderCircle,
@@ -9,7 +9,18 @@ import {
 
 const attendanceUrl = import.meta.env.VITE_ESP32_ATTENDANCE_URL?.trim();
 
+function useLightMotion() {
+  const reducedMotion = useReducedMotion();
+  const isLowEndDevice =
+    typeof navigator !== "undefined" &&
+    typeof navigator.hardwareConcurrency === "number" &&
+    navigator.hardwareConcurrency <= 4;
+
+  return reducedMotion || isLowEndDevice;
+}
+
 export default function OfflineAttendance() {
+  const shouldReduceMotion = useLightMotion();
   const [localNetworkStatus, setLocalNetworkStatus] = useState(
     attendanceUrl ? "checking" : "unconfigured",
   );
@@ -57,20 +68,20 @@ export default function OfflineAttendance() {
   }, [checkLocalAttendance]);
 
   return (
-    <main className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.22),_transparent_34%),linear-gradient(135deg,#020817_0%,#0b1120_35%,#111827_100%)] px-5 py-10 text-white">
+    <main className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.22),transparent_34%),linear-gradient(135deg,#020817_0%,#0b1120_35%,#111827_100%)] px-5 py-10 text-white">
       <div className="pointer-events-none absolute inset-0 opacity-80">
         <div className="absolute -left-14 top-10 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
       </div>
 
       <motion.section
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
+        initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
+        animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+        transition={{ duration: shouldReduceMotion ? 0.08 : 0.45, ease: "easeOut" }}
         className="relative z-10 w-full max-w-xl rounded-[32px] border border-white/15 bg-slate-950/60 p-6 shadow-[0_30px_80px_rgba(15,23,42,0.9)] backdrop-blur-xl sm:p-8"
       >
         <div className="mb-6 flex items-start justify-between gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/25 to-cyan-400/15 text-blue-200 ring-1 ring-white/10">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-blue-500/25 to-cyan-400/15 text-blue-200 ring-1 ring-white/10">
             <WifiOff aria-hidden="true" className="h-7 w-7" />
           </div>
 
@@ -103,7 +114,7 @@ export default function OfflineAttendance() {
             <h2 className="mb-2 font-semibold text-emerald-200">
               ESP32 attendance data
             </h2>
-            <pre className="max-h-56 overflow-auto whitespace-pre-wrap break-words rounded-xl bg-slate-950/40 p-3 text-xs leading-6 text-slate-200">
+            <pre className="max-h-56 overflow-auto whitespace-pre-wrap wrap-break-word rounded-xl bg-slate-950/40 p-3 text-xs leading-6 text-slate-200">
               {JSON.stringify(attendance, null, 2)}
             </pre>
           </div>

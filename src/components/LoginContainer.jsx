@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Google } from "../icons";
 import * as login from "../firebase";
 import { X } from "lucide-react";
@@ -38,7 +38,18 @@ const closeButtonVariants = {
   },
 };
 
+function useLightMotion() {
+  const reducedMotion = useReducedMotion();
+  const isLowEndDevice =
+    typeof navigator !== "undefined" &&
+    typeof navigator.hardwareConcurrency === "number" &&
+    navigator.hardwareConcurrency <= 4;
+
+  return reducedMotion || isLowEndDevice;
+}
+
 export default function LoginPage({ setLoggingIn, isLoggingIn }) {
+  const shouldReduceMotion = useLightMotion();
   const handleLogin = async () => {
     try {
       const result = await login.signInWithGoogle();
@@ -65,7 +76,14 @@ export default function LoginPage({ setLoggingIn, isLoggingIn }) {
     >
       <motion.div
         className="relative h-3/4 w-9/10 overflow-hidden rounded-4xl bg-slate-900/80 object-cover shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-xs sm:w-120"
-        variants={loginPanelVariants}
+        variants={
+          shouldReduceMotion
+            ? {
+                hidden: { opacity: 0 },
+                show: { opacity: 1, transition: { duration: 0.08 } },
+              }
+            : loginPanelVariants
+        }
         initial="hidden"
         animate={isLoggingIn ? "show" : "hidden"}
       >
@@ -78,11 +96,18 @@ export default function LoginPage({ setLoggingIn, isLoggingIn }) {
         </div>
 
         <motion.button
-          variants={closeButtonVariants}
+          variants={
+            shouldReduceMotion
+              ? {
+                  hidden: { opacity: 0 },
+                  show: { opacity: 1, transition: { duration: 0.08 } },
+                }
+              : closeButtonVariants
+          }
           initial="hidden"
           animate={isLoggingIn ? "show" : "hidden"}
-          whileHover={{ scale: 1.3 }}
-          whileTap={{ scale: 0.8 }}
+          whileHover={shouldReduceMotion ? undefined : { scale: 1.3 }}
+          whileTap={shouldReduceMotion ? undefined : { scale: 0.8 }}
           onClick={() => setLoggingIn(false)}
           className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white"
           aria-label="Close login dialog"
@@ -97,8 +122,8 @@ export default function LoginPage({ setLoggingIn, isLoggingIn }) {
 
           <motion.button
             className="flex h-fit w-full cursor-pointer items-center justify-center gap-4 rounded-3xl bg-white/80 py-4 text-lg"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
             onClick={handleLogin}
           >
             <Google className="h-7" />

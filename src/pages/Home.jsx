@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Avatar, Badge } from "@heroui/react";
 import {
   BadgeCheck,
@@ -93,10 +93,21 @@ function getInitials(name) {
   return name?.trim().slice(0, 2).toUpperCase() || "TL";
 }
 
+function useLightMotion() {
+  const reducedMotion = useReducedMotion();
+  const isLowEndDevice =
+    typeof navigator !== "undefined" &&
+    typeof navigator.hardwareConcurrency === "number" &&
+    navigator.hardwareConcurrency <= 4;
+
+  return reducedMotion || isLowEndDevice;
+}
+
 export default function Home() {
   const navigate = useNavigate();
   const [isLoggingIn, setLoggingIn] = useState(false);
   const [user, setUser] = useState(null);
+  const shouldReduceMotion = useLightMotion();
   const isLoggedIn = Boolean(user);
   const layoutKey = `${isLoggedIn}:${user?.displayName ?? ""}`;
 
@@ -110,13 +121,17 @@ export default function Home() {
       <motion.img
         src="/container.png"
         alt="Block"
-        initial={{ opacity: 0, y: 50, rotate: 10 }}
-        animate={{ opacity: 1, y: [0, -16, 0], rotate: [15, 18, 15] }}
-        transition={{
-          opacity: { duration: 0.8 },
-          y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-          rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-        }}
+        initial={
+          shouldReduceMotion
+            ? { opacity: 0 }
+            : { opacity: 0, y: 50, rotate: 10 }
+        }
+        animate={
+          shouldReduceMotion
+            ? { opacity: 1 }
+            : { opacity: 1, y: 0, rotate: 15 }
+        }
+        transition={{ duration: shouldReduceMotion ? 0.12 : 0.7 }}
         className="fixed -bottom-35 left-1/2 w-100 -translate-x-1/2"
       />
       
@@ -139,10 +154,10 @@ export default function Home() {
               variants={orbitBadgeVariants}
               initial="hidden"
               animate="show"
-              className="absolute left-0 top-35 sm:top-25 md:top-0"
+              className="absolute left-0 top-35 md:top-0"
               style={{ transformOrigin: "0 0" }}
             >
-              <div className="translate-x-15 scale-80 sm:translate-x-25 sm:scale-100 md:translate-x-100 md:scale-80 lg:translate-x-120 lg:scale-100">
+              <div className="translate-x-15 scale-80 sm:translate-x-15 md:translate-x-100 lg:translate-x-120 lg:scale-100">
                 <motion.div
                   custom={{ angle, index }}
                   variants={counterRotateVariants}
@@ -176,15 +191,25 @@ export default function Home() {
 }
 
 function HeroHeader() {
+  const shouldReduceMotion = useLightMotion();
+
   return (
     <motion.div
-      variants={heroVariants}
+      variants={
+        shouldReduceMotion
+          ? { hidden: {}, show: { transition: { duration: 0.08 } } }
+          : heroVariants
+      }
       initial="hidden"
       animate="show"
-      className="fixed inset-x-0 top-0 bottom-auto flex scale-90 flex-col items-center justify-center gap-2 p-5 sm:bottom-40 md:scale-80"
+      className="fixed inset-x-0 top-0 bottom-2/5 flex scale-90 md:scale-75 flex-col items-center justify-center gap-2 p-5 sm:bottom-40"
     >
       <motion.div
-        variants={fadeUpVariants}
+        variants={
+          shouldReduceMotion
+            ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.08 } } }
+            : fadeUpVariants
+        }
         className="flex items-center justify-center gap-1.5 rounded-full bg-emerald-800/80 px-3 py-2 pr-4 text-sm text-white sm:text-lg"
       >
         <ListChecks />
@@ -192,7 +217,11 @@ function HeroHeader() {
       </motion.div>
 
       <motion.h1
-        variants={fadeUpVariants}
+        variants={
+          shouldReduceMotion
+            ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.08 } } }
+            : fadeUpVariants
+        }
         className="mb-5 flex flex-col gap-3 text-left text-6xl font-extrabold tracking-tighter text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)] sm:text-center md:text-7xl lg:text-8xl"
       >
         <span>Track every touch</span>
@@ -202,7 +231,11 @@ function HeroHeader() {
       </motion.h1>
 
       <motion.div
-        variants={fadeUpVariants}
+        variants={
+          shouldReduceMotion
+            ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.08 } } }
+            : fadeUpVariants
+        }
         className="rounded-2xl bg-slate-950/50 px-5 py-2 text-left text-lg font-bold text-white backdrop-blur-xs md:text-2xl sm:text-center"
       >
         A Group 4 Project <br /> Built by Arvi Jay Tungpalan
@@ -213,34 +246,49 @@ function HeroHeader() {
 
 function GetStartedButton({ layoutKey, navigate, isLoggedIn, user, setLoggingIn }) {
   const displayName = user?.displayName || "Touch Log User";
+  const shouldReduceMotion = useLightMotion();
 
   return (
     <motion.div
       layout
       layoutDependency={layoutKey}
-      transition={{ layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] } }}
+      transition={{
+        layout: {
+          duration: shouldReduceMotion ? 0.08 : 0.35,
+          ease: [0.22, 1, 0.36, 1],
+        },
+      }}
       className="fixed inset-x-0 bottom-0 flex flex-col items-center justify-center gap-2 pb-5 md:pb-10"
     >
       <motion.button
         layout
         layoutDependency={layoutKey}
-        transition={{ layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] } }}
+        transition={{
+          layout: {
+            duration: shouldReduceMotion ? 0.08 : 0.35,
+            ease: [0.22, 1, 0.36, 1],
+          },
+        }}
         onClick={() => (isLoggedIn ? navigate("/dashboard") : setLoggingIn(true))}
         className="relative flex w-fit max-w-60 items-center justify-center rounded-full bg-white px-3 py-3 text-xl text-black drop-shadow-[0_0px_30px_#0f85ff] backdrop-blur-xs sm:max-w-100"
-        variants={getStartedVariants}
+        variants={
+          shouldReduceMotion
+            ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.08 } } }
+            : getStartedVariants
+        }
         initial="hidden"
         animate="show"
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.92 }}
+        whileHover={shouldReduceMotion ? undefined : { scale: 1.08 }}
+        whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
       >
         <AnimatePresence mode="wait" initial={false}>
           {isLoggedIn ? (
             <motion.span
               key="account"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18 }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
+              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -6 }}
+              transition={{ duration: shouldReduceMotion ? 0.08 : 0.18 }}
               className="inline-flex min-w-0 max-w-full items-center justify-center gap-3"
             >
               <Badge.Anchor>
@@ -257,10 +305,10 @@ function GetStartedButton({ layoutKey, navigate, isLoggedIn, user, setLoggingIn 
           ) : (
             <motion.span
               key="get-started"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18 }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
+              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -6 }}
+              transition={{ duration: shouldReduceMotion ? 0.08 : 0.18 }}
               className="aspect-square w-20 cursor-pointer"
             >
               <Fingerprint className="h-full w-full text-slate-900" />
@@ -275,18 +323,21 @@ function GetStartedButton({ layoutKey, navigate, isLoggedIn, user, setLoggingIn 
             key="logout"
             layout
             layoutDependency={layoutKey}
-            initial={{ opacity: 0, y: 10, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.96 }}
+            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.96 }}
+            animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.96 }}
             transition={{
-              duration: 0.22,
+              duration: shouldReduceMotion ? 0.08 : 0.22,
               ease: "easeOut",
-              layout: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+              layout: {
+                duration: shouldReduceMotion ? 0.08 : 0.35,
+                ease: [0.22, 1, 0.36, 1],
+              },
             }}
             onClick={() => signOutUser()}
             className="relative flex w-fit max-w-60 items-center justify-center gap-1 rounded-full bg-red-500 px-5 py-2 text-base text-white shadow-xl backdrop-blur-xs sm:max-w-100"
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.08 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
           >
             <LogOut className="h-5" />
             Log Out
