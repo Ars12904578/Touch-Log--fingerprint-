@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
-import { toast } from '@heroui/react'
 import { registerSW } from 'virtual:pwa-register'
 
-export default function PwaRegistration() {
+export default function PwaRegistration({ onStatusChange }) {
   useEffect(() => {
     if (!import.meta.env.PROD || !('serviceWorker' in navigator)) return
 
     let registration
+    onStatusChange('loading')
     const checkForUpdate = () => {
       if (document.visibilityState !== 'visible') return
 
@@ -22,17 +22,20 @@ export default function PwaRegistration() {
     registerSW({
       immediate: true,
       onOfflineReady() {
-        toast.success('Ready for offline use', {
-          description:
-            'Touch Log is cached and can now be opened without an internet connection.',
-          timeout: 6000,
-        })
+        onStatusChange('ready')
       },
       onNeedReload() {
         window.location.reload()
       },
       onRegisteredSW(_serviceWorkerUrl, serviceWorkerRegistration) {
         registration = serviceWorkerRegistration
+        if (registration?.active) {
+          onStatusChange('ready')
+        }
+      },
+      onRegisterError(error) {
+        console.error('Service worker registration failed:', error)
+        onStatusChange('error')
       },
     })
 
@@ -41,7 +44,7 @@ export default function PwaRegistration() {
       window.removeEventListener('focus', checkForUpdate)
       document.removeEventListener('visibilitychange', checkForUpdate)
     }
-  }, [])
+  }, [onStatusChange])
 
   return null
 }
