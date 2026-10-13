@@ -40,8 +40,3 @@ body{
 .nav{
   background: linear-gradient(180deg, #ffffff 0%, #0fe7fa00 100%);
 }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}

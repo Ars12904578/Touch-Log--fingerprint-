@@ -3,53 +3,8 @@ import { Google } from "../icons";
 import * as login from "../firebase";
 import { X } from "lucide-react";
 
-const loginOverlayVariants = {
-  hidden: { opacity: 0, pointerEvents: "none", transition: { duration: 0.2 } },
-  show: { opacity: 1, pointerEvents: "auto", transition: { duration: 0.2 } },
-};
-
-const loginPanelVariants = {
-  hidden: {
-    opacity: 0,
-    y: 200,
-    scale: 0.5,
-    rotate: 10,
-    transition: { type: "spring", stiffness: 260, damping: 16, mass: 0.8 },
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    rotate: -2,
-    transition: { type: "spring", stiffness: 260, damping: 16, mass: 0.8 },
-  },
-};
-
-const closeButtonVariants = {
-  hidden: {
-    y: 40,
-    scale: 0,
-    transition: { type: "spring", stiffness: 300, damping: 14 },
-  },
-  show: {
-    y: 0,
-    scale: 1,
-    transition: { type: "spring", stiffness: 300, damping: 14 },
-  },
-};
-
-function useLightMotion() {
+export default function LoginPage({ setLoggingIn }) {
   const reducedMotion = useReducedMotion();
-  const isLowEndDevice =
-    typeof navigator !== "undefined" &&
-    typeof navigator.hardwareConcurrency === "number" &&
-    navigator.hardwareConcurrency <= 4;
-
-  return reducedMotion || isLowEndDevice;
-}
-
-export default function LoginPage({ setLoggingIn, isLoggingIn }) {
-  const shouldReduceMotion = useLightMotion();
   const handleLogin = async () => {
     try {
       const result = await login.signInWithGoogle();
@@ -70,22 +25,17 @@ export default function LoginPage({ setLoggingIn, isLoggingIn }) {
   return (
     <motion.div
       className="fixed inset-0 flex items-center justify-center font-poppins font-semibold"
-      variants={loginOverlayVariants}
-      initial="hidden"
-      animate={isLoggingIn ? "show" : "hidden"}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: reducedMotion ? 0.08 : 0.14, ease: "easeOut" }}
     >
       <motion.div
         className="relative h-3/4 w-9/10 overflow-hidden rounded-4xl bg-slate-900/80 object-cover shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-xs sm:w-120"
-        variants={
-          shouldReduceMotion
-            ? {
-                hidden: { opacity: 0 },
-                show: { opacity: 1, transition: { duration: 0.08 } },
-              }
-            : loginPanelVariants
-        }
-        initial="hidden"
-        animate={isLoggingIn ? "show" : "hidden"}
+        initial={{ opacity: 0, y: reducedMotion ? 0 : 6, scale: reducedMotion ? 1 : 0.99 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: reducedMotion ? 0 : 4, scale: reducedMotion ? 1 : 0.99 }}
+        transition={{ duration: reducedMotion ? 0.08 : 0.16, ease: "easeOut" }}
       >
         <div className="absolute inset-x-0 bottom-4/11 top-0 flex items-center justify-center">
           <img
@@ -95,40 +45,28 @@ export default function LoginPage({ setLoggingIn, isLoggingIn }) {
           />
         </div>
 
-        <motion.button
-          variants={
-            shouldReduceMotion
-              ? {
-                  hidden: { opacity: 0 },
-                  show: { opacity: 1, transition: { duration: 0.08 } },
-                }
-              : closeButtonVariants
-          }
-          initial="hidden"
-          animate={isLoggingIn ? "show" : "hidden"}
-          whileHover={shouldReduceMotion ? undefined : { scale: 1.3 }}
-          whileTap={shouldReduceMotion ? undefined : { scale: 0.8 }}
+        <button
+          type="button"
           onClick={() => setLoggingIn(false)}
-          className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white"
+          className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white transition-transform hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2"
           aria-label="Close login dialog"
         >
           <X className="w-full" />
-        </motion.button>
+        </button>
 
         <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-center gap-4 p-4">
           <div className="rounded-3xl bg-slate-900 p-5 text-white font-light">
             Sign in with your Google account to get started with Touch Log and enjoy a fast, secure attendance experience.
           </div>
 
-          <motion.button
-            className="flex h-fit w-full cursor-pointer items-center justify-center gap-4 rounded-3xl bg-white/80 py-4 text-lg"
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
+          <button
+            type="button"
+            className="flex h-fit w-full cursor-pointer items-center justify-center gap-4 rounded-3xl bg-white/80 py-4 text-lg transition-transform hover:scale-[1.01] active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2"
             onClick={handleLogin}
           >
             <Google className="h-7" />
             <span>Sign in with Google</span>
-          </motion.button>
+          </button>
         </div>
       </motion.div>
     </motion.div>

@@ -33,37 +33,7 @@ const navItems = [
 ];
 
 const buttonStyle =
-  "flex w-fit cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-3 transition-colors";
-
-const navbarItemsVariants = {
-  hidden: {},
-  show: {
-    transition: {
-      delayChildren: 0.12,
-      staggerChildren: 0.07,
-    },
-  },
-};
-
-const navbarItemVariants = {
-  hidden: { opacity: 0, y: 12, scale: 0.75 },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: "spring", stiffness: 420, damping: 16 },
-  },
-};
-
-function useLightMotion() {
-  const reducedMotion = useReducedMotion();
-  const isLowEndDevice =
-    typeof navigator !== "undefined" &&
-    typeof navigator.hardwareConcurrency === "number" &&
-    navigator.hardwareConcurrency <= 4;
-
-  return reducedMotion || isLowEndDevice;
-}
+  "flex w-fit cursor-pointer items-center justify-center gap-1 rounded-full px-4 py-3 transition-colors transition-transform hover:scale-[1.02] active:scale-[0.97]";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -93,7 +63,7 @@ export default function Dashboard() {
 }
 
 function Content({ activePage, setActivePage }) {
-  const shouldReduceMotion = useLightMotion();
+  const reducedMotion = useReducedMotion();
   let Page;
 
   switch (activePage) {
@@ -116,12 +86,12 @@ function Content({ activePage, setActivePage }) {
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={activePage}
-          initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
-          animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-          exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+          initial={{ opacity: 0, y: reducedMotion ? 0 : 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: reducedMotion ? 0 : -2 }}
           transition={{
-            duration: shouldReduceMotion ? 0.08 : 0.22,
-            ease: [0.22, 1, 0.36, 1],
+            duration: reducedMotion ? 0.08 : 0.14,
+            ease: "easeOut",
           }}
           className="h-full"
         >
@@ -166,7 +136,7 @@ function DefaultPage({ setActivePage }) {
             <button
               type="button"
               onClick={() => setActivePage("attendance")}
-              className="group mt-7 inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-slate-900 px-5 py-3 font-semibold text-white shadow-md shadow-blue-950/20 transition duration-200 hover:-translate-y-0.5 hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
+              className="group mt-7 inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-slate-900 px-5 py-3 font-semibold text-white shadow-md shadow-blue-950/20 transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-blue-800 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
             >
               <ClipboardList aria-hidden="true" className="h-5 w-5" />
               Go to Attendance
@@ -235,18 +205,9 @@ function Navbar({
   UserRoundKey,
 }) {
   const initials = user?.displayName?.trim().slice(0, 2).toUpperCase() || "TL";
-  const shouldReduceMotion = useLightMotion();
 
   return (
-    <motion.div
-      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
-      animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-      transition={{
-        type: shouldReduceMotion ? "tween" : "spring",
-        stiffness: shouldReduceMotion ? undefined : 260,
-        damping: shouldReduceMotion ? undefined : 22,
-        duration: shouldReduceMotion ? 0.08 : undefined,
-      }}
+    <div
       className="bg-white/5 backdrop-blur-xs flex h-fit items-center justify-center px-0 py-2 md:inset-x-0 md:top-0 md:bottom-auto md:justify-between md:px-10 md:py-5"
     >
       <img
@@ -256,16 +217,10 @@ function Navbar({
         onClick={() => navigate("/")}
       />
 
-      <motion.div
-        variants={navbarItemsVariants}
-        initial="hidden"
-        animate="show"
+      <div
         className="flex items-center justify-center drop-shadow-[0_0px_30px_#0f85ff] shadow-lg gap-2 rounded-full bg-white/50 p-3 pr-5 backdrop-blur-xs"
       >
-        <motion.div
-          variants={navbarItemVariants}
-          whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
-          whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+        <div
           onClick={() => {
             navigate("/");
           }}
@@ -273,12 +228,9 @@ function Navbar({
         >
           <Home className="h-full w-full" />
           <div className="hidden text-lg sm:block">Home</div>
-        </motion.div>
+        </div>
         {isAdmin && (
-          <motion.div
-            variants={navbarItemVariants}
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+          <div
             onClick={() => {
               setActivePage("admin");
             }}
@@ -286,7 +238,7 @@ function Navbar({
           >
             <UserRoundKey className="h-full w-full" />
             <div className="hidden text-lg sm:block">Admin</div>
-          </motion.div>
+          </div>
         )}
 
         {navItems.map(({ icon: Icon, title, path, page }, index) => {
@@ -297,11 +249,8 @@ function Navbar({
           const isActive = page ? activePage === page : false;
 
           return (
-            <motion.div
+            <div
               key={`${title}-${index}`}
-              variants={navbarItemVariants}
-              whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
               onClick={() => {
                 if (path) {
                   navigate(path);
@@ -319,11 +268,11 @@ function Navbar({
             >
               <Icon className="h-full w-full" />
               <div className="hidden text-lg sm:block">{title}</div>
-            </motion.div>
+            </div>
           );
         })}
 
-        <motion.div variants={navbarItemVariants} className="cursor-pointer">
+        <div className="cursor-pointer">
           <Badge.Anchor>
             <Avatar size="lg">
               <Avatar.Fallback className="bg-slate-900 text-white">
@@ -332,9 +281,9 @@ function Navbar({
             </Avatar>
             <Badge color="success" placement="bottom-right" size="sm" />
           </Badge.Anchor>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+        </div>
+      </div>
+    </div>
   );
 }
 

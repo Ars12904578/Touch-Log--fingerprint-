@@ -16,20 +16,15 @@ import { ArrowLeft, Cpu, LoaderCircle } from "lucide-react";
 function AnimatedRoutes() {
   const location = useLocation();
   const reducedMotion = useReducedMotion();
-  const isLowEndDevice =
-    typeof navigator !== "undefined" &&
-    typeof navigator.hardwareConcurrency === "number" &&
-    navigator.hardwareConcurrency <= 4;
-  const shouldReduceMotion = reducedMotion || isLowEndDevice;
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={location.pathname}
-        initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
-        animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-        exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
-        transition={{ duration: shouldReduceMotion ? 0.1 : 0.18, ease: "easeOut" }}
+        initial={{ opacity: 0, y: reducedMotion ? 0 : 4 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: reducedMotion ? 0 : -2 }}
+        transition={{ duration: reducedMotion ? 0.08 : 0.14, ease: "easeOut" }}
         className="absolute inset-0"
       >
         <Routes location={location}>
@@ -93,7 +88,7 @@ function ManualOfflineNavigation({ offlineStatus }) {
           onClick={() => setShowPrompt(true)}
           aria-label={offlineStatusLabel}
           title={offlineStatusLabel}
-          className="fixed bottom-5 right-5 z-100 rounded-full border border-white/20 bg-slate-950/90 p-3 text-sm font-semibold text-white shadow-lg transition hover:bg-slate-800"
+          className="fixed bottom-5 right-5 z-100 rounded-full border border-white/20 bg-slate-950/90 p-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-slate-800"
         >
           {isDownloading ? (
             <LoaderCircle aria-hidden="true" className="h-5 w-5 animate-spin" />
@@ -123,7 +118,7 @@ function ManualOfflineNavigation({ offlineStatus }) {
                 <button
                   type="button"
                   onClick={() => setShowPrompt(false)}
-                  className="min-h-11 rounded-full border border-white/25 px-5 font-semibold text-white transition hover:bg-white/10"
+                  className="min-h-11 rounded-full border border-white/25 px-5 font-semibold text-white transition-colors hover:bg-white/10"
                 >
                   Back
                 </button>
@@ -133,7 +128,7 @@ function ManualOfflineNavigation({ offlineStatus }) {
                     setShowPrompt(false);
                     navigate("/offline");
                   }}
-                  className="min-h-11 rounded-full bg-white px-5 font-semibold text-slate-950 transition hover:bg-slate-200"
+                  className="min-h-11 rounded-full bg-white px-5 font-semibold text-slate-950 transition-colors hover:bg-slate-200"
                 >
                   Go to Offline Page
                 </button>
@@ -149,20 +144,15 @@ function ManualOfflineNavigation({ offlineStatus }) {
 }
 
 export default function App() {
-  const [backgroundLoaded, setBackgroundLoaded] = useState(false);
   const [offlineStatus, setOfflineStatus] = useState("ready");
 
   return (
     <div>
       <div className="fixed inset-0 h-dvh w-full object-cover">
-        <motion.img
+        <img
           src="/bg.png"
           alt="Background"
           className="h-full w-full object-cover"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: backgroundLoaded ? 1 : 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          onLoad={() => setBackgroundLoaded(true)}
         />
       </div>
       <div className="fixed inset-0 bg-black/10">

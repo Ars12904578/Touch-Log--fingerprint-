@@ -1,4 +1,3 @@
-import { motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 import {
   LoaderCircle,
@@ -9,18 +8,7 @@ import {
 
 const attendanceUrl = import.meta.env.VITE_ESP32_ATTENDANCE_URL?.trim();
 
-function useLightMotion() {
-  const reducedMotion = useReducedMotion();
-  const isLowEndDevice =
-    typeof navigator !== "undefined" &&
-    typeof navigator.hardwareConcurrency === "number" &&
-    navigator.hardwareConcurrency <= 4;
-
-  return reducedMotion || isLowEndDevice;
-}
-
 export default function OfflineAttendance() {
-  const shouldReduceMotion = useLightMotion();
   const [localNetworkStatus, setLocalNetworkStatus] = useState(
     attendanceUrl ? "checking" : "unconfigured",
   );
@@ -74,10 +62,7 @@ export default function OfflineAttendance() {
         <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
       </div>
 
-      <motion.section
-        initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
-        animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-        transition={{ duration: shouldReduceMotion ? 0.08 : 0.45, ease: "easeOut" }}
+      <section
         className="relative z-10 w-full max-w-xl rounded-[32px] border border-white/15 bg-slate-950/60 p-6 shadow-[0_30px_80px_rgba(15,23,42,0.9)] backdrop-blur-xl sm:p-8"
       >
         <div className="mb-6 flex items-start justify-between gap-4">
@@ -130,7 +115,7 @@ export default function OfflineAttendance() {
           type="button"
           onClick={() => void checkLocalAttendance()}
           disabled={localNetworkStatus === "checking"}
-          className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-5 font-semibold text-slate-950 transition duration-200 hover:bg-slate-200 active:scale-[0.99] disabled:cursor-wait disabled:opacity-70"
+          className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-5 font-semibold text-slate-950 transition-[color,background-color,transform] duration-200 hover:bg-slate-200 active:scale-[0.99] disabled:cursor-wait disabled:opacity-70"
         >
           {localNetworkStatus === "checking" ? (
             <LoaderCircle aria-hidden="true" className="h-5 w-5 animate-spin" />
@@ -139,7 +124,7 @@ export default function OfflineAttendance() {
           )}
           Retry connections
         </button>
-      </motion.section>
+      </section>
     </main>
   );
 }
