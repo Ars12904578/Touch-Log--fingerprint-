@@ -3,10 +3,13 @@ import { registerSW } from 'virtual:pwa-register'
 
 export default function PwaRegistration({ onStatusChange }) {
   useEffect(() => {
-    if (!import.meta.env.PROD || !('serviceWorker' in navigator)) return
+    if (!import.meta.env.PROD || !('serviceWorker' in navigator)) {
+      onStatusChange('unavailable')
+      return
+    }
 
     let registration
-    onStatusChange('loading')
+    onStatusChange('checking')
     const checkForUpdate = () => {
       if (document.visibilityState !== 'visible') return
 

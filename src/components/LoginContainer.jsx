@@ -31,7 +31,7 @@ export default function LoginPage({ setLoggingIn }) {
       transition={{ duration: reducedMotion ? 0.08 : 0.14, ease: "easeOut" }}
     >
       <motion.div
-        className="relative h-3/4 w-9/10 overflow-hidden rounded-4xl bg-slate-900/80 object-cover shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-xs sm:w-120"
+        className="relative h-9/10 w-9/10 overflow-hidden rounded-4xl bg-slate-900/80 object-cover shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-md sm:w-120"
         initial={{ opacity: 0, y: reducedMotion ? 0 : 6, scale: reducedMotion ? 1 : 0.99 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: reducedMotion ? 0 : 4, scale: reducedMotion ? 1 : 0.99 }}
@@ -41,7 +41,7 @@ export default function LoginPage({ setLoggingIn }) {
           <img
             src="/android-chrome-512x512.png"
             alt="Touch Log logo"
-            className="max-w-60 drop-shadow-[0_0px_80px_#0f85fa]"
+            className="max-w-50 drop-shadow-[0_0px_80px_#0f85fa]"
           />
         </div>
 

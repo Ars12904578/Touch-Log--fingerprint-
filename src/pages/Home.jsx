@@ -57,7 +57,7 @@ function getInitials(name) {
   return name?.trim().slice(0, 2).toUpperCase() || "TL";
 }
 
-export default function Home() {
+export default function Home({ offlineStatus }) {
   const navigate = useNavigate();
   const [isLoggingIn, setLoggingIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -76,7 +76,7 @@ export default function Home() {
         className="fixed -bottom-35 left-1/2 w-100 -translate-x-1/2 rotate-[15deg]"
       />
       
-      <HeroHeader />
+      <HeroHeader offlineStatus={offlineStatus} />
 
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="relative h-0 w-0">
@@ -126,16 +126,60 @@ export default function Home() {
   );
 }
 
-function HeroHeader() {
+function HeroHeader({ offlineStatus }) {
+  const offlineStatusLabels = {
+    checking: "Downloading resources...",
+    ready: "Offline available",
+    unavailable: "Offline unavailable",
+    error: "Offline unavailable",
+  };
+  const isOfflineReady = offlineStatus === "ready";
+  const isCheckingOffline = offlineStatus === "checking";
+
   return (
     <div
       className="fixed inset-x-0 top-0 bottom-2/5 flex scale-90 md:scale-75 flex-col items-center justify-center gap-2 p-5 sm:bottom-40"
     >
       <div
-        className="flex items-center justify-center gap-1.5 rounded-full bg-emerald-800/80 px-3 py-2 pr-4 text-sm text-white sm:text-lg"
+        className="flex w-fit min-w-60 max-w-[calc(100vw-2.5rem)] flex-col gap-2 rounded-2xl bg-emerald-800/80 px-4 py-3 text-sm text-white sm:text-base"
       >
-        <ListChecks />
-        Fingerprint-Based Attendance System
+        <div className="flex items-center justify-center gap-2">
+          <ListChecks aria-hidden="true" className="h-5 w-5 shrink-0" />
+          <span
+            role="status"
+            aria-live="polite"
+            className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold sm:text-sm ${
+              isOfflineReady
+                ? "border-emerald-200/30 bg-emerald-950/40 text-emerald-100"
+                : isCheckingOffline
+                  ? "border-sky-200/30 bg-sky-950/40 text-sky-100"
+                  : "border-amber-200/30 bg-amber-950/40 text-amber-100"
+            }`}
+          >
+            <span
+              aria-hidden="true"
+              className={`h-2 w-2 rounded-full ${
+                isOfflineReady
+                  ? "bg-emerald-300"
+                  : isCheckingOffline
+                    ? "animate-pulse bg-sky-300"
+                    : "bg-amber-300"
+              }`}
+            />
+            {offlineStatusLabels[offlineStatus]}
+          </span>
+        </div>
+
+        {isCheckingOffline && (
+          <div
+            role="progressbar"
+            aria-label="Downloading offline resources"
+            aria-valuetext="Download in progress"
+            className="h-1.5 w-full overflow-hidden rounded-full bg-sky-950/60"
+          >
+            <div className="offline-resource-progress h-full w-2/5 rounded-full bg-sky-200 shadow-[0_0_10px_rgba(186,230,253,0.7)]" />
+          </div>
+        )}
       </div>
 
       <h1

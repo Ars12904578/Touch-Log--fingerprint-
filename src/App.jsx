@@ -13,7 +13,7 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import { ArrowLeft, Cpu, LoaderCircle } from "lucide-react";
 
-function AnimatedRoutes() {
+function AnimatedRoutes({ offlineStatus }) {
   const location = useLocation();
   const reducedMotion = useReducedMotion();
 
@@ -28,7 +28,7 @@ function AnimatedRoutes() {
         className="absolute inset-0"
       >
         <Routes location={location}>
-          <Route path="/" element={<Home />}></Route>
+          <Route path="/" element={<Home offlineStatus={offlineStatus} />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/offline" element={<OfflineAttendance />}></Route>
           <Route path="*" element={<NotFoundPage />} />
@@ -73,12 +73,12 @@ function ManualOfflineNavigation({ offlineStatus }) {
   const [showPrompt, setShowPrompt] = useState(false);
 
   if (location.pathname === "/") {
-    const isDownloading = offlineStatus === "loading";
+    const isChecking = offlineStatus === "checking";
     const offlineStatusLabel =
-      offlineStatus === "error"
-        ? "Offline resources failed to download"
-        : isDownloading
-          ? "Downloading offline resources"
+      offlineStatus === "error" || offlineStatus === "unavailable"
+        ? "Offline resources are unavailable"
+        : isChecking
+          ? "Checking offline resources"
           : "Open Offline Attendance Page";
 
     return (
@@ -90,7 +90,7 @@ function ManualOfflineNavigation({ offlineStatus }) {
           title={offlineStatusLabel}
           className="fixed bottom-5 right-5 z-100 rounded-full border border-white/20 bg-slate-950/90 p-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-slate-800"
         >
-          {isDownloading ? (
+          {isChecking ? (
             <LoaderCircle aria-hidden="true" className="h-5 w-5 animate-spin" />
           ) : (
             <Cpu aria-hidden="true" className="h-5 w-5" />
@@ -144,7 +144,7 @@ function ManualOfflineNavigation({ offlineStatus }) {
 }
 
 export default function App() {
-  const [offlineStatus, setOfflineStatus] = useState("ready");
+  const [offlineStatus, setOfflineStatus] = useState("checking");
 
   return (
     <div>
@@ -159,7 +159,7 @@ export default function App() {
         <BrowserRouter>
           <PwaRegistration onStatusChange={setOfflineStatus} />
           <ManualOfflineNavigation offlineStatus={offlineStatus} />
-          <AnimatedRoutes />
+          <AnimatedRoutes offlineStatus={offlineStatus} />
         </BrowserRouter>
       </div>
     </div>
