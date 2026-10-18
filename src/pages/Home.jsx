@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, signOutUser } from "../firebase";
+import FadeImage from "../components/FadeImage";
 import LoginPage from "../components/LoginContainer";
 
 const trustBadges = [
@@ -70,7 +71,7 @@ export default function Home() {
 
   return (
     <div>
-      <img
+      <FadeImage
         src="/container.png"
         alt="Block"
         className="fixed -bottom-35 left-1/2 w-100 -translate-x-1/2 rotate-[15deg]"

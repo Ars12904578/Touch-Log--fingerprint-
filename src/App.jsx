@@ -6,7 +6,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import FadeImage from "./components/FadeImage";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import { ArrowLeft } from "lucide-react";
@@ -65,18 +65,13 @@ function NotFoundPage() {
 }
 
 export default function App() {
-  const [backgroundLoaded, setBackgroundLoaded] = useState(false);
-
   return (
     <div>
       <div className="fixed inset-0 h-dvh w-full object-cover">
-        <img
+        <FadeImage
           src="/bg.png"
           alt="Background"
-          onLoad={() => setBackgroundLoaded(true)}
-          className={`h-full w-full object-cover transition-opacity duration-700 ${
-            backgroundLoaded ? "opacity-100" : "opacity-0"
-          }`}
+          className="h-full w-full object-cover"
         />
       </div>
       <div className="fixed inset-0 bg-black/10">

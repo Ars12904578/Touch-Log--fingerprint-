@@ -14,6 +14,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { auth } from "../firebase";
+import FadeImage from "../components/FadeImage";
 
 const teamMembers = [
   { name: "Student #1", lrn: "1", isPresent: false },
@@ -210,7 +211,7 @@ function Navbar({
     <div
       className="bg-white/5 backdrop-blur-xs flex h-fit items-center justify-center px-0 py-2 md:inset-x-0 md:top-0 md:bottom-auto md:justify-between md:px-10 md:py-5"
     >
-      <img
+      <FadeImage
         src="/android-chrome-192x192.png"
         alt="Logo"
         className="hidden w-20 cursor-pointer md:block drop-shadow-[0_0px_30px_#0f85ff]"

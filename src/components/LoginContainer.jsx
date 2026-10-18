@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Google } from "../icons";
 import * as login from "../firebase";
 import { X } from "lucide-react";
+import FadeImage from "./FadeImage";
 
 export default function LoginPage({ setLoggingIn }) {
   const reducedMotion = useReducedMotion();
@@ -38,7 +39,7 @@ export default function LoginPage({ setLoggingIn }) {
         transition={{ duration: reducedMotion ? 0.08 : 0.16, ease: "easeOut" }}
       >
         <div className="absolute inset-x-0 bottom-4/11 top-0 flex items-center justify-center">
-          <img
+          <FadeImage
             src="/android-chrome-512x512.png"
             alt="Touch Log logo"
             className="max-w-50 drop-shadow-[0_0px_80px_#0f85fa]"
