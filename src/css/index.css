@@ -1,28 +1,6 @@
 @import 'tailwindcss';
 @import "@heroui/styles"; 
 
-@keyframes offline-resource-progress {
-  from {
-    transform: translateX(-110%);
-  }
-
-  to {
-    transform: translateX(260%);
-  }
-}
-
-.offline-resource-progress {
-  animation: offline-resource-progress 1.4s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .offline-resource-progress {
-    animation: none;
-    transform: translateX(0);
-    width: 100%;
-  }
-}
-
 body{
   background-color: #2b6aff;
 }

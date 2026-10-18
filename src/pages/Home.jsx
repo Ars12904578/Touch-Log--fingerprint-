@@ -10,7 +10,7 @@ import {
   ClipboardCheck,
   Clock,
   Fingerprint,
-  ListChecks,
+  // ListChecks,
   LogOut,
   ShieldCheck,
   Zap,
@@ -57,7 +57,7 @@ function getInitials(name) {
   return name?.trim().slice(0, 2).toUpperCase() || "TL";
 }
 
-export default function Home({ offlineStatus }) {
+export default function Home() {
   const navigate = useNavigate();
   const [isLoggingIn, setLoggingIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -76,7 +76,7 @@ export default function Home({ offlineStatus }) {
         className="fixed -bottom-35 left-1/2 w-100 -translate-x-1/2 rotate-[15deg]"
       />
 
-      <HeroHeader offlineStatus={offlineStatus} />
+      <HeroHeader />
 
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="relative h-0 w-0">
@@ -124,31 +124,9 @@ export default function Home({ offlineStatus }) {
   );
 }
 
-function HeroHeader({ offlineStatus }) {
-  const offlineStatusLabels = {
-    checking: "Downloading resources...",
-    ready: "Offline available",
-    unavailable: "Offline unavailable",
-    error: "Offline unavailable",
-  };
-  const isOfflineReady = offlineStatus === "ready";
-  const isCheckingOffline = offlineStatus === "checking";
-
+function HeroHeader() {
   return (
     <div className="fixed inset-x-0 top-0 bottom-2/5 flex scale-90 md:scale-75 flex-col items-center justify-center gap-2 p-5 sm:bottom-40">
-      
-
-      {isCheckingOffline && (
-        <div
-          role="progressbar"
-          aria-label="Downloading offline resources"
-          aria-valuetext="Download in progress"
-          className="h-1.5 w-full overflow-hidden rounded-full bg-sky-950/60"
-        >
-          <div className="offline-resource-progress h-full w-2/5 rounded-full bg-sky-200 shadow-[0_0_10px_rgba(186,230,253,0.7)]" />
-        </div>
-      )}
-
       <h1 className="mb-5 flex flex-col gap-3 text-left text-6xl font-extrabold tracking-tighter text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)] sm:text-center md:text-7xl lg:text-8xl">
         <span>Track every touch</span>
         <span className="text-blue-950 text-shadow-[0_0px_50px_rgba(255,255,255,1)]">
@@ -158,32 +136,6 @@ function HeroHeader({ offlineStatus }) {
 
       <div className="rounded-2xl bg-slate-950/50 px-5 py-2 text-left text-lg font-bold text-white backdrop-blur-xs md:text-2xl sm:text-center">
         A Group 4 Project <br /> Built by Arvi Jay Tungpalan
-      </div>
-      
-      <div className="flex items-center justify-center gap-2">
-        <span
-          role="status"
-          aria-live="polite"
-          className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xl font-semibold ${
-            isOfflineReady
-              ? "border-emerald-200/30 bg-emerald-950/40 text-emerald-100"
-              : isCheckingOffline
-                ? "border-sky-200/30 bg-sky-950/40 text-sky-100"
-                : "border-amber-200/30 bg-amber-950/40 text-amber-100"
-          }`}
-        >
-          <span
-            aria-hidden="true"
-            className={`h-4 aspect-square rounded-full ${
-              isOfflineReady
-                ? "bg-emerald-300"
-                : isCheckingOffline
-                  ? "animate-pulse bg-sky-300"
-                  : "bg-amber-300"
-            }`}
-          />
-          {offlineStatusLabels[offlineStatus]}
-        </span>
       </div>
     </div>
   );
