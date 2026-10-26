@@ -74,7 +74,7 @@ export default function App() {
           className="h-full w-full object-cover"
         />
       </div>
-      <div className="fixed inset-0 bg-black/10">
+      <div className="fixed inset-0">
         <BrowserRouter>
           <AnimatedRoutes />
         </BrowserRouter>
