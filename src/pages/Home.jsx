@@ -10,7 +10,7 @@ import {
   ClipboardCheck,
   Clock,
   Fingerprint,
-  // ListChecks,
+  ListChecks,
   LogOut,
   ShieldCheck,
   Zap,
@@ -128,8 +128,12 @@ export default function Home() {
 function HeroHeader() {
   return (
     <div className="fixed inset-x-0 top-0 bottom-2/5 flex scale-90 md:scale-75 flex-col items-center justify-center gap-2 p-5 sm:bottom-40">
+      <div className="text-sm sm:text-lg py-2 px-3 pr-4 bg-emerald-800/80 rounded-full text-white flex items-center justify-center gap-1.5">
+        <ListChecks /> Fingerprint-Based Attendance System
+      </div>
+
       <h1 className="mb-5 flex flex-col gap-3 text-left text-6xl font-extrabold tracking-tighter text-white text-shadow-[0_0px_80px_rgba(0,0,0,0.5)] sm:text-center md:text-7xl lg:text-8xl">
-        <span>Track every touch</span>
+        <span className="text-shadow-[0_0px_50px_rgba(0,0,0,0.5)]">Track every touch</span>
         <span className="text-blue-950 text-shadow-[0_0px_50px_rgba(255,255,255,1)]">
           with Touch Log
         </span>
