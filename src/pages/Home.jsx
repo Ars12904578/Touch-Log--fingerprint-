@@ -71,7 +71,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="pointer-events-none absolute -top-80 left-1/2 h-100 w-200 -translate-x-1/2 rounded-full bg-emerald-600/20 blur-3xl" />
+      {/* <div className="pointer-events-none absolute -top-80 left-1/2 h-100 w-200 -translate-x-1/2 rounded-full bg-emerald-600/20" /> */}
       <FadeImage
         src="/container.png"
         alt="Block"
