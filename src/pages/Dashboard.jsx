@@ -129,9 +129,9 @@ function Content({ activePage, setActivePage, user }) {
 function DefaultPage({ user }) {
   const name = user?.displayName?.trim();
   const initials = name?.slice(0, 2).toUpperCase() || "TL";
-
+ 
   const [query, setQuery] = useState("");
-
+ 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return SECTIONS;
@@ -142,32 +142,39 @@ function DefaultPage({ user }) {
         `grade ${s.grade}`.includes(q),
     );
   }, [query]);
-
+ 
   return (
-    <div className="flex h-full text-white flex-col md:flex-row items-center justify-center">
-      {/* Profile card */}
-      <div className="w-full md:w-100 h-full flex items-center justify-center">
-        <div className="relative w-9/10 h-9/10 overflow-hidden rounded-4xl border border-white/10 bg-slate-800/50 shadow-2xl shadow-black/40 backdrop-blur-xl flex flex-col items-center justify-center gap-6 p-6 text-center">
-          {/* the only soft glow on the card */}
+    // min-h-0 + flex-col lets the list below scroll inside the page on mobile
+    <div className="flex h-full min-h-0 flex-col text-white md:flex-row">
+      {/* Profile card: compact strip on mobile, full card on desktop */}
+      <div className="flex w-full shrink-0 items-center justify-center p-3 pb-0 md:h-full md:w-100 md:p-0">
+        <div className="relative flex w-full items-center gap-4 overflow-hidden rounded-3xl border border-white/10 bg-slate-800/50 p-4 text-left shadow-2xl shadow-black/40 backdrop-blur-xl md:h-9/10 md:w-9/10 md:flex-col md:justify-center md:gap-6 md:rounded-4xl md:p-6 md:text-center">
           <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-blue-500/15 blur-3xl" />
-
+ 
           {/* avatar: solid ring, no gradient */}
-          <div className="relative rounded-full bg-blue-500 p-1 shadow-lg shadow-blue-500/20">
-            <div className="flex aspect-square w-36 items-center justify-center rounded-full bg-slate-950 text-5xl font-bold tracking-wide">
+          <div className="relative shrink-0 rounded-full bg-blue-500 p-0.5 shadow-lg shadow-blue-500/20 md:p-1">
+            <div className="flex aspect-square w-14 items-center justify-center rounded-full bg-slate-950 text-xl font-bold tracking-wide md:w-36 md:text-5xl">
               {initials}
             </div>
           </div>
-
-          <div className="w-full min-w-0">
-            <p className="text-base text-slate-300">Welcome to Touch Log!</p>
-            <h1 className="mt-1 truncate text-3xl font-bold">
+ 
+          <div className="min-w-0 flex-1 md:w-full md:flex-none">
+            <p className="text-sm text-slate-300 md:text-base">
+              Welcome to Touch Log!
+            </p>
+            <h1 className="truncate text-xl font-bold md:mt-1 md:text-3xl">
               {name || "Guest"}
             </h1>
+            {/* mobile-only summary line */}
+            <p className="mt-0.5 text-xs text-slate-400 md:hidden">
+              CTNHS · Student
+            </p>
           </div>
-
-          <div className="h-px w-2/3 bg-white/10" />
-
-          <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
+ 
+          <div className="hidden h-px w-2/3 bg-white/10 md:block" />
+ 
+          {/* desktop-only chips */}
+          <div className="hidden flex-wrap items-center justify-center gap-2 text-sm md:flex">
             <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-slate-300">
               Registered: <strong className="text-white">CTNHS</strong>
             </span>
@@ -177,15 +184,19 @@ function DefaultPage({ user }) {
           </div>
         </div>
       </div>
-
+ 
       {/* do not edit this part */}
-      <div className="flex-1 h-full min-h-0 w-full p-5 flex flex-col gap-5">
+      <div className="flex min-h-0 w-full flex-1 flex-col gap-4 p-3 md:h-full md:gap-5 md:p-5">
+        {/* Search: the main action on this page */}
         <div className="flex flex-col gap-2">
-          <label htmlFor="section-search" className="font-bold pl-5">
+          <label
+            htmlFor="section-search"
+            className="pl-4 text-xl font-bold md:text-2xl"
+          >
             Search
           </label>
-
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-slate-950 p-1 pl-4 transition focus-within:border-blue-400/60 focus-within:ring-4 focus-within:ring-blue-500/20">
+ 
+          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-slate-950 p-1.5 pl-5 shadow-lg shadow-black/30 transition focus-within:border-blue-400/60 focus-within:ring-4 focus-within:ring-blue-500/20">
             <input
               id="section-search"
               type="text"
@@ -193,9 +204,10 @@ function DefaultPage({ user }) {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by section, adviser, or grade..."
               autoComplete="off"
-              className="min-w-0 flex-1 bg-transparent p-2 text-white outline-none placeholder:text-slate-500"
+              // text-base (16px) also stops iOS from zooming in on focus
+              className="min-w-0 flex-1 bg-transparent py-3 text-base text-white outline-none placeholder:text-slate-500 md:text-lg"
             />
-
+ 
             {query && (
               <button
                 type="button"
@@ -206,33 +218,31 @@ function DefaultPage({ user }) {
                 <X size={18} />
               </button>
             )}
-
-            <div className="rounded-full bg-white p-3 text-black">
-              <Search size={20} />
+ 
+            <div className="rounded-full bg-blue-500 p-3.5 text-white">
+              <Search size={22} />
             </div>
           </div>
         </div>
-
+ 
         {/* Sections list */}
         <div className="flex min-h-0 flex-1 flex-col gap-2">
-          <p className="pl-5 text-sm text-slate-400">
+          <p className="pl-4 text-sm text-slate-400">
             {filtered.length} {filtered.length === 1 ? "section" : "sections"}
           </p>
-
+ 
           {filtered.length > 0 ? (
-            <ul className="min-h-0 flex-1 divide-y divide-white/5 overflow-y-auto rounded-3xl border border-white/10 bg-slate-800/40">
+            <ul className="min-h-0 flex-1 touch-pan-y divide-y divide-white/5 overflow-y-auto overscroll-contain rounded-3xl border border-white/10 bg-slate-800/40">
               {filtered.map((s) => (
                 <li key={s.id}>
                   <button
                     type="button"
                     className="group flex w-full items-center gap-4 px-5 py-4 text-left transition hover:bg-white/5 focus-visible:bg-white/5 focus-visible:outline-none"
                   >
-                    <span className="flex size-12 shrink-0 flex-col items-center justify-center rounded-2xl bg-blue-500/15 text-blue-200">
-                      <span className="text-lg font-bold leading-none">
-                        {s.grade}
-                      </span>
+                    <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-blue-500/15 text-lg font-bold text-blue-200">
+                      {s.grade}
                     </span>
-
+ 
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-semibold">
                         {s.name}
@@ -241,12 +251,12 @@ function DefaultPage({ user }) {
                         Adviser: {s.adviser}
                       </span>
                     </span>
-
+ 
                     <span className="hidden items-center gap-1.5 text-sm text-slate-400 sm:flex">
                       <Users size={16} />
                       {s.students}
                     </span>
-
+ 
                     <ChevronRight
                       size={20}
                       className="shrink-0 text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-white"
