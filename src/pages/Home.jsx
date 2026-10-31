@@ -71,6 +71,7 @@ export default function Home() {
 
   return (
     <div>
+      <div className="pointer-events-none absolute -top-80 left-1/2 h-100 w-200 -translate-x-1/2 rounded-full bg-emerald-600/20 blur-3xl" />
       <FadeImage
         src="/container.png"
         alt="Block"
@@ -128,7 +129,7 @@ export default function Home() {
 function HeroHeader() {
   return (
     <div className="fixed inset-x-0 top-0 bottom-2/5 flex scale-90 md:scale-75 flex-col items-center justify-center gap-2 p-5 sm:bottom-40">
-      <div className="text-sm sm:text-lg py-2 px-3 pr-4 bg-emerald-800/80 rounded-full text-white flex items-center justify-center gap-1.5">
+      <div className="text-sm sm:text-lg py-2 px-3 pr-4 bg-emerald-800/50 backdrop-blur-xs rounded-full text-white flex items-center justify-center gap-1.5">
         <ListChecks /> Fingerprint-Based Attendance System
       </div>
 
@@ -139,7 +140,7 @@ function HeroHeader() {
         </span>
       </h1>
 
-      <div className="rounded-2xl bg-slate-950/50 px-5 py-2 text-left text-lg font-bold text-white backdrop-blur-xs md:text-2xl sm:text-center">
+      <div className="rounded-2xl bg-slate-500/50 px-5 py-2 text-left text-lg font-bold text-white backdrop-blur-xs md:text-2xl sm:text-center">
         A Group 4 Project <br /> Built by Arvi Jay Tungpalan
       </div>
     </div>
@@ -156,7 +157,7 @@ function GetStartedButton({ navigate, isLoggedIn, user, setLoggingIn }) {
         onClick={() =>
           isLoggedIn ? navigate("/dashboard") : setLoggingIn(true)
         }
-        className="relative flex w-fit max-w-60 items-center justify-center rounded-full bg-white px-3 py-3 text-xl text-black drop-shadow-[0_0px_30px_#0f85ff] backdrop-blur-xs transition-transform hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 sm:max-w-100"
+        className="cursor-pointer relative flex w-fit max-w-60 items-center justify-center rounded-full bg-white px-3 py-3 text-xl text-black drop-shadow-[0_0px_30px_#0056b8a8] backdrop-blur-xs transition-transform hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 sm:max-w-100"
       >
         {isLoggedIn ? (
           <span className="inline-flex min-w-0 max-w-full items-center justify-center gap-3">
@@ -182,7 +183,7 @@ function GetStartedButton({ navigate, isLoggedIn, user, setLoggingIn }) {
         <button
           type="button"
           onClick={() => signOutUser()}
-          className="relative flex w-fit max-w-60 items-center justify-center gap-1 rounded-full bg-red-500 px-5 py-2 text-base text-white shadow-xl backdrop-blur-xs transition-transform hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 sm:max-w-100"
+          className="relative flex w-fit max-w-60 items-center justify-center gap-1 rounded-full bg-red-500 cursor-pointer px-5 py-2 text-base text-white shadow-xl backdrop-blur-xs transition-transform hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 sm:max-w-100"
         >
           <LogOut className="h-5" />
           Log Out

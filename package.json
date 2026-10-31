@@ -13,7 +13,7 @@
     "@heroui/react": "^3.2.6",
     "@heroui/styles": "^3.2.6",
     "@tailwindcss/vite": "^4.3.3",
-    "firebase": "^12.19.0",
+    "firebase": "^9.14.0",
     "lucide-react": "^1.48.0",
     "motion": "^13.4.4",
     "react": "^19.2.8",
@@ -22,7 +22,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
+    "@eslint/js": "^9.39.5",
     "@gravity-ui/icons": "^2.22.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",

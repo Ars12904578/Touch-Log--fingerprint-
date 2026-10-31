@@ -40,3 +40,46 @@ body{
 .nav{
   background: linear-gradient(180deg, #ffffff 0%, #0fe7fa00 100%);
 }
+
+:root {
+  --scroll-track: #1e293b;   /* slate-800 */
+  --scroll-thumb: #475569;   /* slate-600 */
+  --scroll-thumb-hover: #64748b; /* slate-500 */
+  --scroll-thumb-active: #94a3b8; /* slate-400 */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+}
+
+/* Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 999px;
+  border: 2px solid var(--scroll-track); /* nagbibigay ng "floating" na itsura */
+  transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb-hover);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: var(--scroll-thumb-active);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
